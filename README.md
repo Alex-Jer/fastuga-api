@@ -47,9 +47,8 @@ composer install
 composer update
 composer dump-autoload
 php artisan ide-helper:generate
-[...]
-php artisan migrate:fresh [?]
-php artisan db:seed [?]
+php artisan migrate
+php artisan db:seed
 ```
 
 ## :x: Erros Comuns e Soluções
