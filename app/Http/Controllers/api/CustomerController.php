@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        return CustomerResource::collection(Customer::all());
     }
 
     /**
