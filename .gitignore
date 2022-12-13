@@ -18,3 +18,4 @@ yarn-error.log
 /.vscode
 fastuga.code-workspace
 .prettierrc
+/app/Secrets
