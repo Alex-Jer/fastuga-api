@@ -26,6 +26,17 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         Passport::loadKeysFrom(__DIR__ . '/../Secrets');
+
         //Passport::hashClientSecrets();
+
+        // Passport::tokensCan([
+        //     'place-orders' => 'Place orders',
+        //     'check-status' => 'Check order status',
+        // ]);
+
+        // Passport::setDefaultScope([
+        //     'check-status',
+        //     'place-orders',
+        // ]);
     }
 }

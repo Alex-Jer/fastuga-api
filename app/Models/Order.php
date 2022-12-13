@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
+    protected $dates = ['updated_at', 'created_at'];
 
     public function customer()
     {

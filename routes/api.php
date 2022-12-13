@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\CustomerController;
+use App\Http\Controllers\api\UserController;
+use App\Http\Resources\CustomerResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,5 +28,10 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('customers', [CustomerController::class, 'index']);
+    Route::prefix('users')->controller(UserController::class)->group(function () {
+        Route::get('/', 'allUsers');
+    });
+    Route::prefix('customers')->controller(CustomerResource::class)->group(function () {
+        Route::get('/', 'allCostumers');
+    });
 });
