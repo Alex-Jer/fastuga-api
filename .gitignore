@@ -19,3 +19,4 @@ yarn-error.log
 fastuga.code-workspace
 .prettierrc
 /app/Secrets
+.rnd
