@@ -29,14 +29,25 @@ class AuthServiceProvider extends ServiceProvider
 
         //Passport::hashClientSecrets();
 
-        // Passport::tokensCan([
-        //     'place-orders' => 'Place orders',
-        //     'check-status' => 'Check order status',
-        // ]);
+        Passport::tokensCan([
+            'view_orders' => 'View orders',
+            'prepare_orders' => 'Prepare orders',
+            'deliver_orders' => 'Deliver orders',
+            'cancel_orders' => 'Cancel orders',
+            'manage_users' => 'Manage users',
+            'manage_products' => 'Manage products',
+        ]);
 
         // Passport::setDefaultScope([
-        //     'check-status',
-        //     'place-orders',
         // ]);
+
+        /*
+        view_orders			1 << 0
+        prepare_orders		1 << 1
+        deliver_orders		1 << 2
+        cancel_orders		1 << 3
+        manage_users		1 << 4
+        manage_products		1 << 5
+        */
     }
 }

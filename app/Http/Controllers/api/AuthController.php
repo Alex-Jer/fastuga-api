@@ -24,6 +24,11 @@ class AuthController extends Controller
         return response(['user' => Auth::user(), 'access_token' => $accessToken]);
     }
 
+    // public function scopes()
+    // {
+    //     return Auth::user()->scopes();
+    // }
+
     public function logout(Request $request)
     {
         $accessToken = $request->user()->token();

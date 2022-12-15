@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -24,6 +26,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'type',
     ];
 
     /**
@@ -59,5 +62,25 @@ class User extends Authenticatable
     public function orderItems()
     {
         return $this->hasManyThrough(Order::class, Product::class, 'preparation_by', 'id', 'id', 'order_id');
+    }
+
+    public function perms()
+    {
+        return
+            DB::table('permissions')
+                ->where('type', '=', $this->type)
+                ->get()[0]->permissions;
+    }
+
+    public function scopes()
+    {
+        $perms = $this->perms();
+        $scopes = [];
+        for ($i = 0; $i <= 5; $i++) {
+            if ($perms & (1 << $i)) {
+                $scopes[] = DB::table('scopes')->where('id', '=', $i)->get()[0]->scope_name;
+            }
+        }
+        return $scopes;
     }
 }
