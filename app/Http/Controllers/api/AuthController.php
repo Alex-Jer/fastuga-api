@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,7 +23,7 @@ class AuthController extends Controller
         $authUser = Auth::user();
         $accessToken = $authUser->createToken('authToken', $authUser->scopes())->accessToken;
 
-        return response(['message' => 'Login was successfull', 'user' => $authUser, 'access_token' => $accessToken]);
+        return response(['message' => 'Login was successfull', 'user' => new UserResource($authUser), 'access_token' => $accessToken]);
     }
 
     // public function scopes()
