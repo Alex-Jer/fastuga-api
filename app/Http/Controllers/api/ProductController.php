@@ -34,10 +34,11 @@ class ProductController extends Controller
         if ($request->type == null)
             return response(['message' => 'A product type is required'], 400);
 
-        if ($request->hasFile('photo')) {
-            $newProduct['photo_url'] = basename($request->file('photo')->store('public/products'));
-            unset($newProduct['photo']);
-        }
+        if (!$request->hasFile('photo'))
+            return response(['message' => 'You must provide a photo for your new product'], 400);
+
+        $newProduct['photo_url'] = basename($request->file('photo')->store('public/products'));
+        unset($newProduct['photo']);
 
         return response(["message" => "Product created", "product" => Product::create($newProduct)]);
     }
