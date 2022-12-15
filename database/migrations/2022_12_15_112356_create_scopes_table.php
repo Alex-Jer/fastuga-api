@@ -19,12 +19,12 @@ return new class extends Migration
         });
 
         DB::table('scopes')->insert([
-            ['id' => 0, 'scope_name' => 'view_orders'],
-            ['id' => 1, 'scope_name' => 'prepare_orders'],
-            ['id' => 2, 'scope_name' => 'deliver_orders'],
-            ['id' => 3, 'scope_name' => 'cancel_orders'],
-            ['id' => 4, 'scope_name' => 'manage_users'],
-            ['id' => 5, 'scope_name' => 'manage_products'],
+            ['id' => 0, 'scope_name' => 'view-orders'],
+            ['id' => 1, 'scope_name' => 'prepare-orders'],
+            ['id' => 2, 'scope_name' => 'deliver-orders'],
+            ['id' => 3, 'scope_name' => 'cancel-orders'],
+            ['id' => 4, 'scope_name' => 'manage-users'],
+            ['id' => 5, 'scope_name' => 'manage-products'],
         ]);
     }
 
