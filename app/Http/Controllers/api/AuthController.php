@@ -16,12 +16,13 @@ class AuthController extends Controller
         ]);
 
         if (!Auth::attempt($login)) {
-            return response(['message' => 'Invalid login credentials']);
+            return response(['message' => 'Invalid login credentials'], 401);
         }
 
-        $accessToken = Auth::user()->createToken('authToken')->accessToken;
+        $authUser = Auth::user();
+        $accessToken = $authUser->createToken('authToken', $authUser->scopes())->accessToken;
 
-        return response(['user' => Auth::user(), 'access_token' => $accessToken]);
+        return response(['message' => 'Login was successfull', 'user' => $authUser, 'access_token' => $accessToken]);
     }
 
     // public function scopes()
@@ -35,6 +36,6 @@ class AuthController extends Controller
         $token = $request->user()->tokens->find($accessToken);
         $token->revoke();
         $token->delete();
-        return response(['msg' => 'Token revoked'], 200);
+        return response(['message' => 'Token revoked']);
     }
 }
