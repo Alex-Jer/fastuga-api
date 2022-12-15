@@ -28,8 +28,8 @@ class ProductRequest extends FormRequest
             'name' => 'required|string',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
+            'type' => 'required|in:hot dish,cold dish,drink,dessert',
             'photo' => 'nullable|image|max:8192',
-            'type' => 'in:hot dish,cold dish,drink,dessert'
         ];
     }
 }
