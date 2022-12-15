@@ -73,6 +73,9 @@ class ProductController extends Controller
             $product->photo_url ? Storage::delete('public/products/' . $product->photo_url) : null;
         }
 
+        //prevent updating type
+        unset($newProduct['type']);
+
         $product->update($newProduct);
         return response(['message' => 'Product updated']);
     }

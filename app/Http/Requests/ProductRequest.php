@@ -29,7 +29,7 @@ class ProductRequest extends FormRequest
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'photo' => 'nullable|image|max:8192',
-            'type' => ['nullable', new Enum(ProductType::class)]
+            'type' => 'in:hot dish,cold dish,drink,dessert'
         ];
     }
 }
