@@ -14,17 +14,17 @@ return new class extends Migration
     public function up()
     {
         Schema::create('scopes', function (Blueprint $table) {
-            $table->id();
+            $table->bigInteger('id', false, true)->primary();
             $table->string('scope_name', 20);
         });
 
         DB::table('scopes')->insert([
-            ['scope_name' => 'view_orders'],
-            ['scope_name' => 'prepare_orders'],
-            ['scope_name' => 'deliver_orders'],
-            ['scope_name' => 'cancel_orders'],
-            ['scope_name' => 'manage_users'],
-            ['scope_name' => 'manage_products'],
+            ['id' => 0, 'scope_name' => 'view_orders'],
+            ['id' => 1, 'scope_name' => 'prepare_orders'],
+            ['id' => 2, 'scope_name' => 'deliver_orders'],
+            ['id' => 3, 'scope_name' => 'cancel_orders'],
+            ['id' => 4, 'scope_name' => 'manage_users'],
+            ['id' => 5, 'scope_name' => 'manage_products'],
         ]);
     }
 
