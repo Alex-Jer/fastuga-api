@@ -22,12 +22,15 @@ use Illuminate\Support\Facades\Route;
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::delete('logout', 'logout')->middleware('auth:api');
-    Route::get('users/me', [UserController::class, 'show_me'])->middleware('auth:api');
     //Route::get('scopes', 'scopes')->middleware('auth:api');
 });
 
-Route::prefix('users')->controller(UserController::class)->group(function () {
-    Route::get('/', 'allUsers');
+Route::prefix('users')->controller(UserController::class)->middleware('auth:api')->group(function () {
+    Route::get('/me', 'showMe');
+    Route::put('/me', 'updateMe');
+    Route::middleware('scope:manage-users')->group(function () {
+        Route::get('/', 'allUsers');
+    });
 });
 Route::prefix('customers')->controller(CustomerController::class)->group(function () {
     Route::get('/', 'allCostumers');

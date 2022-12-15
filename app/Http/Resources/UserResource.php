@@ -14,6 +14,17 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            "user_id" => $this->id,
+            "name" => $this->name,
+            "email" => $this->email,
+            "type" => $this->type,
+            "photo_url" => $this->photo_url,
+            "blocked" => $this->blocked,
+            //TODO: do we need to know if the email was verified?
+            //"email_verified_at" => $this->email_verified_at,
+            "created_at" => $this->created_at,
+            "updated_at" => $this->updated_at,
+        ];
     }
 }
