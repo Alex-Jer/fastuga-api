@@ -25,15 +25,6 @@ class Product extends Model
         'price'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'custom',
-    ];
-
     public function orders()
     {
         return $this->belongsToMany(Order::class, 'order_items', 'product_id', 'order_id');
