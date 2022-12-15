@@ -23,7 +23,8 @@ class ProductResource extends JsonResource
             "photo_url" => $this->photo_url,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
-            "deleted_at" => $this->deleted_at,
+            //TODO: display deleted products?
+            /*"deleted_at" => $this->deleted_at,*/
         ];
     }
 }

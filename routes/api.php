@@ -19,29 +19,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});*/
-
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::delete('logout', 'logout')->middleware('auth:api');
     //Route::get('scopes', 'scopes')->middleware('auth:api');
 });
 
-Route::middleware('auth:api')->group(function () {
-    Route::prefix('users')->controller(UserController::class)->group(function () {
-        Route::get('/', 'allUsers');
-    });
-    Route::prefix('customers')->controller(CustomerController::class)->group(function () {
-        Route::get('/', 'allCostumers');
-    });
-    Route::prefix('products')->controller(ProductController::class)->group(function () {
-        Route::get('/', 'menu'); //TODO: guests allowed
-        Route::middleware('scope:manage-products')->group(function () {
-            Route::post('/', 'store');
-            Route::put('/{product}', 'update');
-            Route::delete('/{product}', 'destroy');
-        });
+Route::prefix('users')->controller(UserController::class)->group(function () {
+    Route::get('/', 'allUsers');
+});
+Route::prefix('customers')->controller(CustomerController::class)->group(function () {
+    Route::get('/', 'allCostumers');
+});
+Route::prefix('products')->controller(ProductController::class)->group(function () {
+    Route::get('/', 'menu');
+    Route::get('/{product}', 'show');
+    Route::middleware(['auth:api', 'scope:manage-products'])->group(function () {
+        Route::post('/', 'store');
+        Route::put('/{product}', 'update');
+        Route::delete('/{product}', 'destroy');
     });
 });
