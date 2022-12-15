@@ -37,9 +37,11 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/', 'allCostumers');
     });
     Route::prefix('products')->controller(ProductController::class)->group(function () {
-        Route::get('/', 'menu');
-        Route::post('/', 'store');
-        Route::put('/{product}', 'update');
-        Route::delete('/{product}', 'destroy');
+        Route::get('/', 'menu'); //TODO: guests allowed
+        Route::middleware('scope:manage-products')->group(function () {
+            Route::post('/', 'store');
+            Route::put('/{product}', 'update');
+            Route::delete('/{product}', 'destroy');
+        });
     });
 });
