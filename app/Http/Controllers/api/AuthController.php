@@ -39,4 +39,9 @@ class AuthController extends Controller
         $token->delete();
         return response(['message' => 'Token revoked']);
     }
+
+    public function test(Request $request)
+    {
+        return response(['message' => 'Test was successfull']);
+    }
 }

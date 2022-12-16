@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::delete('logout', 'logout')->middleware('auth:api');
+    Route::get('test', 'test')->middleware('auth:api');
     //Route::get('scopes', 'scopes')->middleware('auth:api');
 });
 
