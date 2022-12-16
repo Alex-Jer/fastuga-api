@@ -25,7 +25,6 @@ class UserPutRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'email' => 'required|email',
             'type' => 'required|in:EC,ED,EM',
             'photo' => 'nullable|image|max:8192',
         ];
