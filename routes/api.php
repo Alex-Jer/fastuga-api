@@ -30,7 +30,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::get('/users/me/email/verify', function () {
     //  Only used when a logged in user tries to access a "verified" middleware protected route
     // (currently unused)
-    return response(['message' => 'User\'s email is not verified. Cannot complete requested action.'], 401);
+    return response(['message' => 'User\'s email is not verified. Cannot complete requested action.'], 403);
 })->name('verification.notice');
 
 

@@ -31,11 +31,6 @@ class UserController extends Controller
         return new UserResource($request->user());
     }
 
-    public function updateMe(Request $request)
-    {
-        //return new UserResource($request->user());
-    }
-
     public function store(UserPostRequest $request)
     {
         $newUser = $request->validated();
@@ -66,6 +61,13 @@ class UserController extends Controller
 
         $user->update($newUser);
         return response(['message' => 'User updated']);
+    }
+
+    public function updateMe(UserPutRequest $request, User $user)
+    {
+        if ($user->id !== $request->user()->id)
+            return response(['message' => 'You can only update your own account'], 403);
+        return $this->update($request, $user);
     }
 
     public function show(User $user)
