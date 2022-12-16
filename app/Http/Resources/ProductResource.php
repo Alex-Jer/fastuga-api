@@ -21,8 +21,8 @@ class ProductResource extends JsonResource
             "type" => $this->type,
             "price" => $this->price,
             "photo_url" => $this->photo_url,
-            "created_at" => $this->created_at,
-            "updated_at" => $this->updated_at,
+            /*"created_at" => $this->created_at,
+            "updated_at" => $this->updated_at,*/
             //TODO: display deleted products?
             /*"deleted_at" => $this->deleted_at,*/
         ];

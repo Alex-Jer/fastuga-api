@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserPostRequest;
+use App\Http\Requests\User\UserPostRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -33,7 +33,7 @@ class UserController extends Controller
     public function store(UserPostRequest $request)
     {
         if ($request->type == 'C')
-            return response(['message' => 'Wrong route! To create a client use the ' + route('register-client') + ' route'], 400);
+            return response(['message' => 'Wrong route! To create a client use the ' . route('register-client') . ' route'], 400);
 
         $newUser = $request->validated();
 

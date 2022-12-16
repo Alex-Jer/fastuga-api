@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 
 class UserPostRequest extends FormRequest
 {
@@ -28,7 +27,7 @@ class UserPostRequest extends FormRequest
             'name' => 'required|string',
             'email' => 'required|email',
             'password' => 'required|string|confirmed|between:6,128',
-            'type' => 'required|in:EC,ED,EM',
+            'type' => 'required|in:C,EC,ED,EM',
             'photo' => 'required|image|max:8192',
         ];
     }
