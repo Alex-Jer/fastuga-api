@@ -37,6 +37,8 @@ Route::prefix('users')->controller(UserController::class)->middleware('auth:api'
         Route::delete('/{user}', 'destroy');
         Route::patch('/{user}/block', 'block');
         Route::patch('/{user}/unblock', 'unblock');
+        Route::get('/{user}/email/verify', 'isMyEmailVerified');
+        Route::patch('/{user}/email/verify', 'verifyMyEmail');
     });
 });
 Route::prefix('customers')->controller(CustomerController::class)->group(function () {
