@@ -22,6 +22,7 @@ class CustomerResource extends JsonResource
             "default_payment_type" => $this->default_payment_type,
             "default_payment_reference" => $this->default_payment_reference,
             /*"created_at" => $this->created_at,*/
+            //TODO: display user details on customer resource
         ];
     }
 }
