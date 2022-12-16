@@ -65,6 +65,8 @@ class UserController extends Controller
 
     public function updateMe(UserPutRequest $request, User $user)
     {
+        if ($user->type == 'C')
+            return response(['message' => 'To update your account as a customer please use the ' . route('update-customer-profile') . ' route'], 403);
         if ($user->id !== $request->user()->id)
             return response(['message' => 'You can only update your own account'], 403);
         return $this->update($request, $user);

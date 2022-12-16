@@ -37,8 +37,9 @@ Route::get('/users/me/email/verify', function () {
 
 Route::prefix('users')->controller(UserController::class)->middleware('auth:api')->group(function () {
     Route::get('/me', 'showMe');
-    Route::patch('/me/email/verify', 'verifyMyEmail')->name('verification.send');
+    Route::put('/me', 'updateMe')->name('update-employee-profile');
 
+    Route::patch('/me/email/verify', 'verifyMyEmail')->name('verification.send');
     Route::get('/me/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
 
@@ -59,7 +60,8 @@ Route::prefix('users')->controller(UserController::class)->middleware('auth:api'
 Route::prefix('customers')->controller(CustomerController::class)->group(function () {
     Route::post('/', 'store')->name('register-client'); //Register clients
     Route::middleware('auth:api')->group(function () {
-        Route::get('/', 'allCostumers');
+        Route::put('/me', 'updateMe')->name('update-customer-profile');
+        //Route::get('/', 'allCostumers'); //TODO: this needed?
     });
 });
 Route::prefix('products')->controller(ProductController::class)->group(function () {
