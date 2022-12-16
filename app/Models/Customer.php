@@ -11,6 +11,7 @@ class Customer extends Model
     use HasFactory, SoftDeletes;
 
     protected $dates = ['updated_at', 'created_at', 'deleted_at'];
+    //protected $with = ['user'];
 
     public function user()
     {
