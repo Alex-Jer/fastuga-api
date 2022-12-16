@@ -28,6 +28,8 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::prefix('users')->controller(UserController::class)->middleware('auth:api')->group(function () {
     Route::get('/me', 'showMe');
+    Route::get('/me/email/verify', 'isMyEmailVerified');
+    Route::patch('/me/email/verify', 'verifyMyEmail');
     /*Route::put('/me', 'updateMe');*/
     Route::middleware('scope:manage-users')->group(function () {
         Route::post('/', 'store'); //Register a new employee
@@ -37,8 +39,6 @@ Route::prefix('users')->controller(UserController::class)->middleware('auth:api'
         Route::delete('/{user}', 'destroy');
         Route::patch('/{user}/block', 'block');
         Route::patch('/{user}/unblock', 'unblock');
-        Route::get('/{user}/email/verify', 'isMyEmailVerified');
-        Route::patch('/{user}/email/verify', 'verifyMyEmail');
     });
 });
 Route::prefix('customers')->controller(CustomerController::class)->group(function () {
