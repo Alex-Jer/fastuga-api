@@ -5,6 +5,7 @@ use App\Http\Controllers\api\CustomerController;
 use App\Http\Controllers\api\ProductController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Resources\CustomerResource;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,9 +27,24 @@ Route::controller(AuthController::class)->group(function () {
     //Route::get('scopes', 'scopes')->middleware('auth:api');
 });
 
+Route::get('/users/me/email/verify', function () {
+    //  Only used when a logged in user tries to access a "verified" middleware protected route
+    // (currently unused)
+    return response(['message' => 'User\'s email is not verified. Cannot complete requested action.'], 401);
+})->name('verification.notice');
+
+
+
 Route::prefix('users')->controller(UserController::class)->middleware('auth:api')->group(function () {
     Route::get('/me', 'showMe');
-    Route::patch('/me/verify', 'verifyMyEmail');
+    Route::patch('/me/email/verify', 'verifyMyEmail')->name('verification.send');
+
+    Route::get('/me/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+
+        return response(['message' => 'Your email was successfully verified'], 200);
+    })->middleware('signed')->name('verification.verify');
+
     /*Route::put('/me', 'updateMe');*/
     Route::middleware('scope:manage-users')->group(function () {
         Route::post('/', 'store'); //Register a new employee
