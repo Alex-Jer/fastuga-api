@@ -15,7 +15,8 @@ class CustomerResource extends JsonResource
     public function toArray($request)
     {
         return [
-            "user_id" => $this->user_id,
+            //remove redunctant field
+            /*"user_id" => $this->user_id,*/
             "phone" => $this->phone,
             "points" => $this->points,
             "nif" => $this->nif,
