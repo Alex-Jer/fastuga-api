@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Helpers\StorageLocation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductPostRequest;
 use App\Http\Requests\ProductRequest;
@@ -12,6 +13,7 @@ use Storage;
 
 class ProductController extends Controller
 {
+    public const storage_loc = StorageLocation::PRODUCT_PHOTOS;
     /**
      * Display a listing of the resource.
      *
@@ -37,7 +39,7 @@ class ProductController extends Controller
         if (!$request->hasFile('photo'))
             return response(['message' => 'You must provide a photo for your new product'], 400);
 
-        $newProduct['photo_url'] = basename($request->file('photo')->store('public/products'));
+        $newProduct['photo_url'] = basename($request->file('photo')->store($this->storage_loc));
         unset($newProduct['photo']);
 
         return response(["message" => "Product created", "product" => new ProductResource(Product::create($newProduct))]);
@@ -66,11 +68,11 @@ class ProductController extends Controller
         $newProduct = $request->validated();
 
         if ($request->hasFile('photo')) {
-            $newProduct['photo_url'] = basename($request->file('photo')->store('public/products'));
+            $newProduct['photo_url'] = basename($request->file('photo')->store($this->storage_loc));
             unset($newProduct['photo']);
 
             //Delete previous photo
-            $product->photo_url ? Storage::delete('public/products/' . $product->photo_url) : null;
+            $product->photo_url ? Storage::delete($this->storage_loc . '/' . $product->photo_url) : null;
         }
 
         //prevent updating type

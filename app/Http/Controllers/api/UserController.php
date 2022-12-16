@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Helpers\StorageLocation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserPostRequest;
 use App\Http\Requests\User\UserPutRequest;
@@ -12,6 +13,7 @@ use Storage;
 
 class UserController extends Controller
 {
+    public const storage_loc = StorageLocation::USER_PHOTOS;
     /**
      * Display a listing of the resource.
      *
@@ -39,7 +41,7 @@ class UserController extends Controller
         if (!$request->hasFile('photo'))
             return response(['message' => 'You must provide a profile picture for a new user'], 400);
 
-        $newUser['photo_url'] = basename($request->file('photo')->store('public/fotos'));
+        $newUser['photo_url'] = basename($request->file('photo')->store($this->storage_loc));
         unset($newUser['photo']);
 
         return response(["message" => "User created", "user" => User::create($newUser)]);
@@ -53,11 +55,11 @@ class UserController extends Controller
         $newUser = $request->validated();
 
         if ($request->hasFile('photo')) {
-            $newUser['photo_url'] = basename($request->file('photo')->store('public/fotos'));
+            $newUser['photo_url'] = basename($request->file('photo')->store($this->storage_loc));
             unset($newUser['photo']);
 
             //Delete previous photo
-            $newUser->photo_url ? Storage::delete('public/fotos/' . $newUser->photo_url) : null;
+            $newUser->photo_url ? Storage::delete($this->storage_loc . '/' . $newUser->photo_url) : null;
         }
 
         $user->update($newUser);
