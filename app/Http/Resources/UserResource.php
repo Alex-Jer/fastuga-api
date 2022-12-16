@@ -20,8 +20,8 @@ class UserResource extends JsonResource
             "email" => $this->email,
             "type" => $this->type,
             "photo_url" => $this->photo_url,
-            "blocked" => $this->blocked
-            //"email_verified_at" => $this->email_verified_at,
+            "blocked" => $this->blocked,
+            "email_verified_at" => $this->email_verified_at,
             /*"created_at" => $this->created_at,
             "updated_at" => $this->updated_at,*/
         ], ($this->customer ? ["customer" => new CustomerResource($this->customer)] : []));

@@ -98,12 +98,12 @@ class UserController extends Controller
         return response(['message' => 'User unblocked']);
     }
 
-    public function isMyEmailVerified(Request $request)
+    /*public function isMyEmailVerified(Request $request)
     {
         if ($request->user()->email_verified_at)
             return response(['status' => true, 'message' => 'User\'s email is verified', 'email_verified_at' => $request->user()->email_verified_at]);
         return response(['status' => false, 'message' => 'User\'s email is not verified']);
-    }
+    }*/
 
     public function verifyMyEmail(Request $request)
     {
