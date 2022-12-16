@@ -4,7 +4,9 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomerResource;
+use App\Http\Resources\UserResource;
 use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -16,7 +18,7 @@ class CustomerController extends Controller
      */
     public function allCostumers()
     {
-        return CustomerResource::collection(Customer::all());
+        return UserResource::collection(User::where('type', 'C')->get());
     }
 
     /**

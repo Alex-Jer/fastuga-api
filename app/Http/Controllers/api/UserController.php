@@ -6,6 +6,7 @@ use App\Helpers\StorageLocation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserPostRequest;
 use App\Http\Requests\User\UserPutRequest;
+use App\Http\Resources\CustomerResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class UserController extends Controller
 
     public function showMe(Request $request)
     {
-        //return new UserResource($request->user());
+        return new UserResource($request->user());
     }
 
     public function updateMe(Request $request)
@@ -49,9 +50,6 @@ class UserController extends Controller
 
     public function update(UserPutRequest $request, User $user)
     {
-        if ($user->type == 'C')
-            return response(['message' => 'You are not authorized to update client users'], 403);
-
         $newUser = $request->validated();
 
         if ($request->hasFile('photo')) {
