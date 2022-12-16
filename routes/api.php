@@ -27,8 +27,8 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::prefix('users')->controller(UserController::class)->middleware('auth:api')->group(function () {
-    /*Route::get('/me', 'showMe');
-    Route::put('/me', 'updateMe');*/
+    Route::get('/me', 'showMe');
+    /*Route::put('/me', 'updateMe');*/
     Route::middleware('scope:manage-users')->group(function () {
         Route::post('/', 'store'); //Register a new employee
         Route::get('/', 'allUsers');
