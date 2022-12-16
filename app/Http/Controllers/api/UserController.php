@@ -9,6 +9,7 @@ use App\Http\Requests\User\UserPutRequest;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Storage;
 
@@ -39,13 +40,16 @@ class UserController extends Controller
     {
         $newUser = $request->validated();
 
-        if (!$request->hasFile('photo'))
-            return response(['message' => 'You must provide a profile picture for a new user'], 422);
+        if ($request->hasFile('photo')) {
+            $newUser['photo_url'] = basename($request->file('photo')->store($this->storage_loc));
+            unset($newUser['photo']);
+        }
 
-        $newUser['photo_url'] = basename($request->file('photo')->store($this->storage_loc));
-        unset($newUser['photo']);
+        $regUser = User::create($newUser);
 
-        return response(["message" => "User created", "user" => User::create($newUser)]);
+        event(new Registered($regUser));
+
+        return response(["message" => "User created", "user" => $regUser]);
     }
 
     public function update(UserPutRequest $request, User $user)
