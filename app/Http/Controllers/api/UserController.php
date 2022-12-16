@@ -33,7 +33,7 @@ class UserController extends Controller
     public function store(UserPostRequest $request)
     {
         if ($request->type == 'C')
-            return response(['message' => 'Wrong route! To create a client use the ' + '' + ' route'], 400);
+            return response(['message' => 'Wrong route! To create a client use the ' + route('register-client') + ' route'], 400);
 
         $newUser = $request->validated();
 

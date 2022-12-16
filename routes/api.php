@@ -26,14 +26,18 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::prefix('users')->controller(UserController::class)->middleware('auth:api')->group(function () {
-    Route::get('/me', 'showMe');
-    Route::put('/me', 'updateMe');
+    /*Route::get('/me', 'showMe');
+    Route::put('/me', 'updateMe');*/
     Route::middleware('scope:manage-users')->group(function () {
         Route::get('/', 'allUsers');
+        Route::post('/', 'store'); //Register a new employee
     });
 });
 Route::prefix('customers')->controller(CustomerController::class)->group(function () {
-    Route::get('/', 'allCostumers');
+    Route::post('/', 'store')->name('register-client'); //Register clients
+    Route::middleware('auth:api')->group(function () {
+        Route::get('/', 'allCostumers');
+    });
 });
 Route::prefix('products')->controller(ProductController::class)->group(function () {
     Route::get('/', 'menu');
