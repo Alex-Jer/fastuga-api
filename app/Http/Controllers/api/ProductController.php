@@ -40,7 +40,7 @@ class ProductController extends Controller
         $newProduct['photo_url'] = basename($request->file('photo')->store('public/products'));
         unset($newProduct['photo']);
 
-        return response(["message" => "Product created", "product" => Product::create($newProduct)]);
+        return response(["message" => "Product created", "product" => new ProductResource(Product::create($newProduct))]);
     }
 
     /**
