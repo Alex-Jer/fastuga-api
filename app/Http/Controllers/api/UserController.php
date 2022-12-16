@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserPostRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -21,11 +22,27 @@ class UserController extends Controller
 
     public function showMe(Request $request)
     {
-        return new UserResource($request->user());
+        //return new UserResource($request->user());
     }
 
     public function updateMe(Request $request)
     {
         //return new UserResource($request->user());
+    }
+
+    public function store(UserPostRequest $request)
+    {
+        if ($request->type == 'C')
+            return response(['message' => 'Wrong route! To create a client use the ' + '' + ' route'], 400);
+
+        $newUser = $request->validated();
+
+        if (!$request->hasFile('photo'))
+            return response(['message' => 'You must provide a profile picture for a new user'], 400);
+
+        $newUser['photo_url'] = basename($request->file('photo')->store('public/fotos'));
+        unset($newUser['photo']);
+
+        return response(["message" => "User created", "user" => User::create($newUser)]);
     }
 }
