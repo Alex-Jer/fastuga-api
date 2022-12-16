@@ -34,10 +34,10 @@ class ProductController extends Controller
     {
         $newProduct = $request->validated();
         if ($request->type == null)
-            return response(['message' => 'A product type is required'], 400);
+            return response(['message' => 'A product type is required'], 422);
 
         if (!$request->hasFile('photo'))
-            return response(['message' => 'You must provide a photo for your new product'], 400);
+            return response(['message' => 'You must provide a photo for your new product'], 422);
 
         $newProduct['photo_url'] = basename($request->file('photo')->store($this->storage_loc));
         unset($newProduct['photo']);
