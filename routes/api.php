@@ -30,8 +30,13 @@ Route::prefix('users')->controller(UserController::class)->middleware('auth:api'
     /*Route::get('/me', 'showMe');
     Route::put('/me', 'updateMe');*/
     Route::middleware('scope:manage-users')->group(function () {
-        Route::get('/', 'allUsers');
         Route::post('/', 'store'); //Register a new employee
+        Route::get('/', 'allUsers');
+        Route::get('/{user}', 'show');
+        Route::put('/{user}', 'update');
+        Route::delete('/{user}', 'destroy');
+        Route::put('/{user}/block', 'block');
+        Route::put('/{user}/unblock', 'unblock');
     });
 });
 Route::prefix('customers')->controller(CustomerController::class)->group(function () {

@@ -18,6 +18,7 @@ class CustomerController extends Controller
      */
     public function allCostumers()
     {
+        //To also return user information
         return UserResource::collection(User::where('type', 'C')->get());
     }
 

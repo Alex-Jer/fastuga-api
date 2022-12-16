@@ -63,4 +63,38 @@ class UserController extends Controller
         $user->update($newUser);
         return response(['message' => 'User updated']);
     }
+
+    public function show(User $user)
+    {
+        return new UserResource($user);
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return response(['message' => 'User deleted']);
+    }
+
+    public function block(User $user)
+    {
+        if ($user->blocked)
+            return response(['message' => 'That user is already blocked'], 422);
+
+        $user->blocked = true;
+
+        foreach ($user->tokens as $token)
+            $token->revoke();
+
+        $user->save();
+        return response(['message' => 'User blocked']);
+    }
+
+    public function unblock(User $user)
+    {
+        if (!$user->blocked)
+            return response(['message' => 'That user is not blocked'], 422);
+        $user->blocked = false;
+        $user->save();
+        return response(['message' => 'User unblocked']);
+    }
 }

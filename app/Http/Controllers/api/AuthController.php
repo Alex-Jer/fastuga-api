@@ -21,6 +21,11 @@ class AuthController extends Controller
         }
 
         $authUser = Auth::user();
+
+        if ($authUser->blocked) {
+            return response(['message' => 'This account is blocked from using our services'], 401);
+        }
+
         $accessToken = $authUser->createToken('authToken', $authUser->scopes())->accessToken;
 
         return response(['message' => 'Login was successfull', 'user' => new UserResource($authUser), 'access_token' => $accessToken]);
