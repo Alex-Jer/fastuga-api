@@ -31,8 +31,8 @@ class CustomerPostRequest extends FormRequest
             'photo' => 'nullable|image|max:8192',
             'phone' => 'required|string|size:9',
             'nif' => 'nullable|string|size:9',
-            'default_payment_type' => 'nullable|in:VISA,PAYPAL,MBWAY',
-            'default_payment_reference' => 'nullable|string|max:255',
+            'default_payment_type' => 'nullable|in:VISA,PAYPAL,MBWAY|required_with:default_payment_reference',
+            'default_payment_reference' => 'nullable|string|max:255|required_with:default_payment_type',
         ];
     }
 }
