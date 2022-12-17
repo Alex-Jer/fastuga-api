@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Helpers\StorageLocation;
+use App\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserPostRequest;
 use App\Http\Requests\User\UserPutRequest;
@@ -11,6 +12,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Storage;
 
 class UserController extends Controller
@@ -35,14 +37,7 @@ class UserController extends Controller
     {
         $newUser = $request->validated();
 
-        if ($request->hasFile('photo')) {
-            $newUser['photo_url'] = basename($request->file('photo')->store($this->storage_loc));
-            unset($newUser['photo']);
-        }
-
-        $regUser = User::create($newUser);
-
-        event(new Registered($regUser));
+        $regUser = UserHelper::registerUser($request, $newUser);
 
         return response(["message" => "User created", "user" => $regUser]);
     }
