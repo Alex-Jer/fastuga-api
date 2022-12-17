@@ -51,13 +51,23 @@ class UserController extends Controller
     {
         $newUser = $request->validated();
 
+        $deleteUserPhoto = false;
         if ($request->hasFile('photo')) {
             $newUser['photo_url'] = basename($request->file('photo')->store($this->storage_loc));
             unset($newUser['photo']);
 
-            //Delete previous photo
-            $newUser->photo_url ? Storage::delete($this->storage_loc . '/' . $newUser->photo_url) : null;
+            $deleteUserPhoto = true;
+        } else if ($request->has('remove_photo') && $request->remove_photo) {
+            $newUser['photo_url'] = null;
+            $deleteUserPhoto = true;
         }
+
+        //Delete previous photo
+        if (
+            $deleteUserPhoto &&
+            $user->photo_url
+        )
+            Storage::delete($this->storage_loc . '/' . $user->photo_url);
 
         $user->update($newUser);
         return response(['message' => 'User updated']);

@@ -27,6 +27,7 @@ class UserPutRequest extends FormRequest
             'name' => 'required|string',
             'type' => 'required|in:EC,ED,EM',
             'photo' => 'nullable|image|max:8192',
+            'remove_photo' => 'nullable|boolean',
         ];
     }
 }
