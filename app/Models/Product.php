@@ -22,7 +22,8 @@ class Product extends Model
         'description',
         'type',
         'photo_url',
-        'price'
+        'price',
+        'points',
     ];
 
     public function orders()

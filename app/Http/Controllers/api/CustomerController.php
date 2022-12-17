@@ -48,6 +48,7 @@ class CustomerController extends Controller
         $regUser = UserHelper::registerUser($request, $newUser);
 
         $newCustomer["user_id"] = $regUser->id;
+        $newCustomer["points"] = 0;
 
         $regCustomer = Customer::create($newCustomer);
 
