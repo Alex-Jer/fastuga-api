@@ -144,4 +144,17 @@ class UserController extends Controller
 
         return response(['message' => 'Email changed! Verification email sent']);
     }
+
+    /*public function forgotPassword(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? response(['message' => "Sent a password recovery email"], 200)
+            : response(["message" => "An error occurred", "errors" => ['email' => __($status)]], 422);
+    }*/
 }
