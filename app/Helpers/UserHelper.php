@@ -38,7 +38,7 @@ class UserHelper
             $deleteUserPhoto = true;
         }
 
-        //Delete previous photo
+        //Delete photo when true
         if (
             $deleteUserPhoto &&
             $user->photo_url
