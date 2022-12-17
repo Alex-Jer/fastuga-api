@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\CustomerPostRequest;
+use App\Http\Requests\User\CustomerPutRequest;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\UserResource;
 use App\Models\Customer;
@@ -62,23 +63,27 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function updateCustomer(Request $request, Customer $customer)
+    public function updateCustomer(CustomerPutRequest $request)
     {
+        if ($request->user()->type != 'C')
+            return response(['message' => 'You are not a customer! To update your account please use the ' . route('update-employee-profile') . ' route'], 403);
+
         $newCustomer = $request->validated();
 
         $newUser = [
-            "name" => $newCustomer["name"],
-            "photo" => $newCustomer["photo"],
-            "remove_photo" => $newCustomer["remove_photo"]
+            "name" => $newCustomer["name"]
         ];
+
+        if ($request->has('remove_photo'))
+            $newUser["remove_photo"] = $newCustomer["remove_photo"];
 
         //Unset all user fields from newCustomer
         foreach ($newUser as $key => $value)
             unset($newCustomer[$key]);
 
-        UserHelper::updateUser($request, $newUser, $customer->user);
+        UserHelper::updateUser($request, $newUser, $request->user());
 
-        $customer->update($newCustomer);
+        $request->user()->customer->update($newCustomer);
 
         return response(['message' => 'User updated']);
     }
