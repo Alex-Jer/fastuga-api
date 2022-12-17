@@ -8,6 +8,7 @@ use App\Http\Requests\User\UserPostRequest;
 use App\Http\Requests\User\UserPutRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Hash;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -101,5 +102,39 @@ class UserController extends Controller
             return response(['message' => 'User\'s email is already verified'], 400);
         $request->user()->sendEmailVerificationNotification();
         return response(['message' => 'Verification email sent']);
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required|string|between:6,128',
+            'new_password' => 'required|string|confirmed|between:6,128',
+        ]);
+
+        //Check if old password is correct
+        if (!Hash::check($request->old_password, $request->user()->password))
+            return response(['message' => 'Current password is incorrect'], 401);
+
+        $user = $request->user();
+        $user->password = bcrypt($request->new_password);
+        $user->save();
+
+        return response(['message' => 'Password changed']);
+    }
+
+    public function changeEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|unique:users,email',
+        ]);
+
+        $user = $request->user();
+        $user->email = $request->email;
+        $user->email_verified_at = null;
+        $user->save();
+
+        $user->sendEmailVerificationNotification();
+
+        return response(['message' => 'Email changed! Verification email sent']);
     }
 }
