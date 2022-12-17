@@ -28,7 +28,7 @@ class CustomerPostRequest extends FormRequest
             'email' => 'required|email|unique:users',
             'password' => 'required|string|confirmed|between:6,128',
             'type' => 'required|in:C',
-            'photo' => 'required|image|max:8192',
+            'photo' => 'nullable|image|max:8192',
             'phone' => 'required|string|size:9',
             'nif' => 'nullable|string|size:9',
             'default_payment_type' => 'nullable|in:VISA,PAYPAL,MBWAY',

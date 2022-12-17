@@ -2,22 +2,16 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Helpers\StorageLocation;
 use App\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserPostRequest;
 use App\Http\Requests\User\UserPutRequest;
-use App\Http\Resources\CustomerResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Storage;
 
 class UserController extends Controller
 {
-    public const storage_loc = StorageLocation::USER_PHOTOS;
     /**
      * Display a listing of the resource.
      *
@@ -39,32 +33,15 @@ class UserController extends Controller
 
         $regUser = UserHelper::registerUser($request, $newUser);
 
-        return response(["message" => "User created", "user" => $regUser]);
+        return response(["message" => "User created", "user" => new UserResource($regUser)]);
     }
 
     public function update(UserPutRequest $request, User $user)
     {
         $newUser = $request->validated();
 
-        $deleteUserPhoto = false;
-        if ($request->hasFile('photo')) {
-            $newUser['photo_url'] = basename($request->file('photo')->store($this->storage_loc));
-            unset($newUser['photo']);
+        UserHelper::updateUser($request, $newUser, $user);
 
-            $deleteUserPhoto = true;
-        } else if ($request->has('remove_photo') && $request->remove_photo) {
-            $newUser['photo_url'] = null;
-            $deleteUserPhoto = true;
-        }
-
-        //Delete previous photo
-        if (
-            $deleteUserPhoto &&
-            $user->photo_url
-        )
-            Storage::delete($this->storage_loc . '/' . $user->photo_url);
-
-        $user->update($newUser);
         return response(['message' => 'User updated']);
     }
 

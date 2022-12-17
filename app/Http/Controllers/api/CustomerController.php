@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\CustomerPostRequest;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\UserResource;
 use App\Models\Customer;
@@ -28,20 +30,28 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CustomerPostRequest $request)
     {
-        //
-    }
+        $newCustomer = $request->validated();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Customer $customer)
-    {
-        //
+        $newUser = [
+            "name" => $newCustomer["name"],
+            "email" => $newCustomer["email"],
+            "password" => $newCustomer["password"],
+            "type" => $newCustomer["type"]
+        ];
+
+        //Unset all user fields from newCustomer
+        foreach ($newUser as $key => $value)
+            unset($newCustomer[$key]);
+
+        $regUser = UserHelper::registerUser($request, $newUser);
+
+        $newCustomer["user_id"] = $regUser->id;
+
+        $regCustomer = Customer::create($newCustomer);
+
+        return response(["message" => "Customer user created", "user" => new UserResource($regCustomer->user)]);
     }
 
     /**
@@ -51,19 +61,24 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Customer $customer)
+    public function updateCustomer(Request $request, Customer $customer)
     {
-        //
-    }
+        $newCustomer = $request->validated();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Customer $customer)
-    {
-        //
+        $newUser = [
+            "name" => $newCustomer["name"],
+            "photo" => $newCustomer["photo"],
+            "remove_photo" => $newCustomer["remove_photo"]
+        ];
+
+        //Unset all user fields from newCustomer
+        foreach ($newUser as $key => $value)
+            unset($newCustomer[$key]);
+
+        UserHelper::updateUser($request, $newUser, $customer->user);
+
+        $customer->update($newCustomer);
+
+        return response(['message' => 'User updated']);
     }
 }
