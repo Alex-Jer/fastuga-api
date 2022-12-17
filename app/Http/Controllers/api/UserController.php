@@ -116,10 +116,17 @@ class UserController extends Controller
             return response(['message' => 'Current password is incorrect'], 401);
 
         $user = $request->user();
-        $user->password = bcrypt($request->new_password);
+
+        $user->password = Hash::make($request->new_password);
         $user->save();
 
-        return response(['message' => 'Password changed']);
+        //Revoke tokens on pass change
+        foreach ($user->tokens as $token)
+            $token->revoke();
+
+        $newToken = $user->createToken('authToken', $user->scopes())->accessToken;
+
+        return response(['message' => 'Password changed', "access_token" => $newToken]);
     }
 
     public function changeEmail(Request $request)
