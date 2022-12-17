@@ -133,7 +133,7 @@ class UserController extends Controller
         $user->email_verified_at = null;
         $user->save();
 
-        $user->sendEmailVerificationNotification();
+        //$user->sendEmailVerificationNotification();
 
         return response(['message' => 'Email changed! Verification email sent']);
     }

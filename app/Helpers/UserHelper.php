@@ -20,7 +20,7 @@ class UserHelper
 
         $regUser = User::create($newUser);
 
-        event(new Registered($regUser));
+        //event(new Registered($regUser));
 
         return $regUser;
     }
