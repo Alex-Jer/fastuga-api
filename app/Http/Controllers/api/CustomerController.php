@@ -38,7 +38,7 @@ class CustomerController extends Controller
             "name" => $newCustomer["name"],
             "email" => $newCustomer["email"],
             "password" => $newCustomer["password"],
-            "type" => $newCustomer["type"]
+            "type" => 'C'
         ];
 
         //Unset all user fields from newCustomer

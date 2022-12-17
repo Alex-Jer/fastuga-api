@@ -62,13 +62,15 @@ Route::prefix('users')->controller(UserController::class)->middleware('auth:api'
         Route::patch('/{user}/unblock', 'unblock');
     });
 });
+
 Route::prefix('customers')->controller(CustomerController::class)->group(function () {
-    Route::post('/', 'store')->name('register-client'); //Register clients
+    Route::post('/', 'store')->name('register-customer'); //Register clients
     Route::middleware('auth:api')->group(function () {
         Route::put('/me', 'updateCustomer')->name('update-customer-profile');
         //Route::get('/', 'allCostumers'); //TODO: is this needed?
     });
 });
+
 Route::prefix('products')->controller(ProductController::class)->group(function () {
     Route::get('/', 'menu');
     Route::get('/{product}', 'show');
