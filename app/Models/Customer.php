@@ -13,6 +13,14 @@ class Customer extends Model
     protected $dates = ['updated_at', 'created_at', 'deleted_at'];
     //protected $with = ['user'];
 
+    protected $fillable = [
+        'user_id',
+        'phone',
+        'nif',
+        'default_payment_type',
+        'default_payment_reference',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
