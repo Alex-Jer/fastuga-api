@@ -38,12 +38,19 @@ class OrderController extends Controller
     {
         $newOrder = $request->validated();
 
-        if (Auth::check()) {
-            if ($request->user()->type !== 'C')
+
+        $usr = Auth::guard('api')->user();
+        if ($usr) {
+            if ($usr->type !== 'C')
                 return response(['message' => 'Only customers can place orders'], 403);
-            $newOrder["customer_id"] = $request->user()->customer->id;
+            $newOrder["customer_id"] = $usr->customer->id;
         }
 
+        return $this->processNewOrder($request, $newOrder, $usr);
+    }
+
+    public function processNewOrder(OrderPostRequest $request, $newOrder, $usr)
+    {
         $cartJson = json_decode($newOrder["cart"]);
         $cart = [];
         $productArray = [];
@@ -52,29 +59,28 @@ class OrderController extends Controller
 
         if (count($cartJson) == 0)
             return response(["message" => "Cart is empty"], 422);
-
         foreach ($cartJson as $product) {
-            if (!array_key_exists("quantity", $product) || !array_key_exists("id", $product))
+            if (!$product->quantity || !$product->id)
                 continue;
             $cart[] = $product;
 
             try {
-                $thisProd = Product::where("id", $product["id"])->firstOrFail();
+                $thisProd = Product::where("id", $product->id)->firstOrFail();
             } catch (ModelNotFoundException $e) {
-                return response(["message" => "Product not found", "product_id" => $product["id"]], 404);
+                return response(["message" => "Product not found", "product_id" => $product->id], 404);
             }
 
-            $productArray[$product["id"]] = ["price" => $thisProd->price, "type" => $thisProd->type];
-            $totalPrice += $thisProd->price * $product["quantity"];
+            $productArray[$product->id] = ["price" => $thisProd->price, "type" => $thisProd->type];
+            $totalPrice += $thisProd->price * $product->quantity;
         }
 
         if (count($cart) == 0)
             return response(["message" => "Cart is empty"], 422);
 
-        if ($request->user() && $request->user()->customer) {
+        if ($usr) {
             $pointsUsed = $newOrder["points_used"] ?? 0;
             $pointsUsed = floor($pointsUsed / 10) * 10; //floor to nearest 10 in case someone tries to spend points not in 10 points blocks
-            $cstmr = $request->user()->customer;
+            $cstmr = $usr->customer;
 
             if ($pointsUsed > 0) {
                 if ($cstmr->points < $pointsUsed) {
@@ -107,12 +113,12 @@ class OrderController extends Controller
         $regOrder = Order::create($newOrder);
 
         foreach ($cart as $product) {
-            for ($i = 0; $i < $product["quantity"]; $i++) {
+            for ($i = 0; $i < $product->quantity; $i++) {
                 OrderItem::create([
                     "order_id" => $regOrder->id,
-                    "product_id" => $product["id"],
-                    "price" => $productArray[$product["id"]]["price"],
-                    "status" => $productArray[$product["id"]]["type"] === "hot dish" ? 'W' : 'R',
+                    "product_id" => $product->id,
+                    "price" => $productArray[$product->id]["price"],
+                    "status" => $productArray[$product->id]["type"] === "hot dish" ? 'W' : 'R',
                     'notes' => $product["notes"] ?? null
                 ]);
             }
