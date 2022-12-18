@@ -97,6 +97,11 @@ class ProductController extends Controller
 
     public function allTypes()
     {
-        return Product::select("type")->distinct()->get();
+        $typesArr = Product::select("type")->distinct()->get();
+        $types = [];
+        foreach ($typesArr as $type) {
+            $types[] = $type->type;
+        }
+        return $types;
     }
 }
