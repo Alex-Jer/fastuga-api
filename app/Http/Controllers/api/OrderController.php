@@ -96,6 +96,10 @@ class OrderController extends Controller
             }
 
             $newOrder['points_gained'] = floor($totalPrice / 10);
+        } else {
+            $newOrder['points_used_to_pay'] = 0;
+            $newOrder['total_paid_with_points'] = 0;
+            $newOrder['points_gained'] = 0;
         }
 
         $ticketNumber = OrderHelper::nextTicketNumber();
@@ -103,7 +107,7 @@ class OrderController extends Controller
 
         $newOrder['status'] = 'P';
         $newOrder['total_price'] = $totalPrice;
-        $newOrder['total_paid'] = $newOrder['total_paid_with_points'] ? $totalPrice - $newOrder['total_paid_with_points'] : $totalPrice;
+        $newOrder['total_paid'] = array_key_exists("total_paid_with_points", $newOrder) ? $totalPrice - $newOrder['total_paid_with_points'] : $totalPrice;
 
         $newOrder['date'] = Date::now();
 
@@ -113,8 +117,10 @@ class OrderController extends Controller
             return response(["message" => $payVal['message']], 402); //We are using 402 as a "payment failed" error code
         }
 
-        $cstmr->points -= $pointsUsed;
-        $cstmr->save();
+        if ($usr) {
+            $cstmr->points -= $pointsUsed;
+            $cstmr->save();
+        }
         $regOrder = Order::create($newOrder);
 
         $count = 1;
