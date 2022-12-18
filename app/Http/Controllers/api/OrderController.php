@@ -46,10 +46,10 @@ class OrderController extends Controller
             $newOrder["customer_id"] = $usr->customer->id;
         }
 
-        return $this->processNewOrder($request, $newOrder, $usr);
+        return $this->processNewOrder($newOrder, $usr);
     }
 
-    public function processNewOrder(OrderPostRequest $request, $newOrder, $usr)
+    public function processNewOrder($newOrder, $usr)
     {
         $cartJson = json_decode($newOrder["cart"]);
         $cart = [];
