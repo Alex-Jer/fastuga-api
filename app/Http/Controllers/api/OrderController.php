@@ -72,7 +72,11 @@ class OrderController extends Controller
 
         $newOrder['date'] = Date::now();
 
-        //TODO: COMPLETE PAYMENT PROCESS
+        $payVal = OrderHelper::processPayment($newOrder["payment_type"], $newOrder["payment_reference"], $newOrder['total_paid']);
+
+        if ($payVal['status'] == false) {
+            return response(["message" => $payVal['message']], 402); //We are using 402 as a "payment failed" error code
+        }
 
         $regOrder = Order::create($newOrder);
 
