@@ -16,7 +16,8 @@ class OrderHelper
     {
         if (self::$currTickNumber === 99)
             self::$currTickNumber = 0;
-        return self::$currTickNumber++;
+        self::$currTickNumber++;
+        return self::$currTickNumber;
     }
 
 
@@ -31,16 +32,19 @@ class OrderHelper
             case 'visa':
                 if (strlen($reference) !== 16 || !is_numeric($reference))
                     return $err;
-                else if (startsWith('0'))
+                else if (str_starts_with($reference, '0'))
                     return $err;
+                break;
             case 'paypal':
                 if (!filter_var($reference, FILTER_VALIDATE_EMAIL))
                     return $err;
+                break;
             case 'mbway':
                 if (strlen($reference) !== 9 || !is_numeric($reference))
                     return $err;
-                else if (startsWith('0'))
+                else if (str_starts_with($reference, '0'))
                     return $err;
+                break;
             default:
                 return $err;
         }
@@ -65,8 +69,8 @@ class OrderHelper
         if (!$resValPay['status'])
             return $resValPay;
 
-        $data = array('type' => $type, 'reference' => $reference, 'value' => $value);
-        $client = new Client();
+        $data = array('type' => strtolower($type), 'reference' => $reference, 'value' => $value);
+        $client = new Client(['verify' => false, 'http_errors' => false]);
         $headers = [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
@@ -76,11 +80,11 @@ class OrderHelper
         $res = $client->sendAsync($request)->wait();
         $result = json_decode($res->getBody());
 
-        if ($result['status'] !== "valid")
+        if ($result->status !== "valid")
             return [
-                'status' => false, 'message' => ($result['message'] == 'invalid reference' ?
+                'status' => false, 'message' => ($result->message == 'invalid reference' ?
                     'Invalid payment reference'
-                    : ucfirst($result['message'])
+                    : ucfirst($result->message)
                 )
             ];
         //Other possible error messages: Payment limit exceeded

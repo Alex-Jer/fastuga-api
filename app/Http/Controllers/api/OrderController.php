@@ -90,8 +90,6 @@ class OrderController extends Controller
                 if ($cstmr->points < $pointsUsed) {
                     return response(["message" => "Not enough points"], 403);
                 }
-                $cstmr->points -= $pointsUsed;
-                $cstmr->save();
 
                 $newOrder['points_used_to_pay'] = $pointsUsed;
                 $newOrder['total_paid_with_points'] = ($pointsUsed / 10) * $eur_per_10_pts;
@@ -100,7 +98,8 @@ class OrderController extends Controller
             $newOrder['points_gained'] = floor($totalPrice / 10);
         }
 
-        $newOrder['ticket_number'] = OrderHelper::nextTicketNumber();
+        $ticketNumber = OrderHelper::nextTicketNumber();
+        $newOrder['ticket_number'] = $ticketNumber;
 
         $newOrder['status'] = 'P';
         $newOrder['total_price'] = $totalPrice;
@@ -114,17 +113,22 @@ class OrderController extends Controller
             return response(["message" => $payVal['message']], 402); //We are using 402 as a "payment failed" error code
         }
 
+        $cstmr->points -= $pointsUsed;
+        $cstmr->save();
         $regOrder = Order::create($newOrder);
 
+        $count = 1;
         foreach ($cart as $product) {
             for ($i = 0; $i < $product->quantity; $i++) {
                 OrderItem::create([
+                    'order_local_number' => $count,
                     "order_id" => $regOrder->id,
                     "product_id" => $product->id,
                     "price" => $productArray[$product->id]["price"],
                     "status" => $productArray[$product->id]["type"] === "hot dish" ? 'W' : 'R',
-                    'notes' => $product["notes"] ?? null
+                    'notes' => $product->notes ?? null
                 ]);
+                $count++;
             }
         }
 
