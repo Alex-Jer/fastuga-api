@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Order;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 
@@ -10,14 +11,15 @@ class OrderHelper
     // 1 point = 5€
     public const EUR_PER_10_POINTS = 5.0;
 
-    private static $currTickNumber = 0;
-
     public static function nextTicketNumber(): int
     {
-        if (self::$currTickNumber === 99)
-            self::$currTickNumber = 0;
-        self::$currTickNumber++;
-        return self::$currTickNumber;
+        $lastOrder = Order::orderBy('id', 'desc')->first();
+        if ($lastOrder) {
+            $num = $lastOrder->ticket_number + 1;
+            if ($num > 99) $num = 1;
+            return $num;
+        } else
+            return 1;
     }
 
 
