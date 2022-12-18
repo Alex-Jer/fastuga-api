@@ -78,8 +78,8 @@ Route::prefix('customers')->controller(CustomerController::class)->group(functio
 
 Route::prefix('products')->controller(ProductController::class)->group(function () {
     Route::get('/', 'menu');
+    Route::get('/types', 'allTypes');
     Route::get('/{product}', 'show');
-    Route::get('/type', 'allTypes');
     Route::middleware(['auth:api', 'scope:manage-products'])->group(function () {
         Route::post('/', 'store');
         Route::put('/{product}', 'update');
