@@ -81,9 +81,9 @@ class OrderController extends Controller
             $pointsUsed = $newOrder["points_used"] ?? 0;
             $pointsUsed = floor($pointsUsed / 10) * 10; //floor to nearest 10 in case someone tries to spend points not in 10 points blocks
 
-            $points_to_eur = OrderHelper::POINTS_TO_EUR;
-            $pointsUsed = $pointsUsed * $points_to_eur > $totalPrice ? floor($totalPrice / $points_to_eur) : $pointsUsed; //if points used are more than total price, set points used to total price
-
+            $eur_per_10_pts = OrderHelper::EUR_PER_10_POINTS;
+            $pointsUsed = ($pointsUsed / 10) * $eur_per_10_pts > $totalPrice ? floor($totalPrice / $eur_per_10_pts) * 10 : $pointsUsed; //if points used are more than total price, set points used to total price
+            //TODO: voltar atrás quando excede prob, falar com stor
             $cstmr = $usr->customer;
 
             if ($pointsUsed > 0) {
@@ -94,7 +94,7 @@ class OrderController extends Controller
                 $cstmr->save();
 
                 $newOrder['points_used_to_pay'] = $pointsUsed;
-                $newOrder['total_paid_with_points'] = $pointsUsed * $points_to_eur;
+                $newOrder['total_paid_with_points'] = ($pointsUsed / 10) * $eur_per_10_pts;
             }
 
             $newOrder['points_gained'] = floor($totalPrice / 10);

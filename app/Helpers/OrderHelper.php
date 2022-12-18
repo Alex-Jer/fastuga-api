@@ -8,7 +8,7 @@ use GuzzleHttp\Psr7\Request;
 class OrderHelper
 {
     // 1 point = 5€
-    public const POINTS_TO_EUR = 5.0;
+    public const EUR_PER_10_POINTS = 5.0;
 
     private static $currTickNumber = 0;
 
