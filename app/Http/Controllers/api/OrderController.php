@@ -9,6 +9,7 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use Auth;
 use Date;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -36,6 +37,12 @@ class OrderController extends Controller
     public function store(OrderPostRequest $request)
     {
         $newOrder = $request->validated();
+
+        if (Auth::check()) {
+            if ($request->user()->type !== 'C')
+                return response(['message' => 'Only customers can place orders'], 403);
+            $newOrder["customer_id"] = $request->user()->customer->id;
+        }
 
         $cartJson = json_decode($newOrder["cart"]);
         $cart = [];
