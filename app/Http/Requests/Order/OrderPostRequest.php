@@ -24,7 +24,7 @@ class OrderPostRequest extends FormRequest
     public function rules()
     {
         return [
-            'payment_type' => 'required|string|in:VISA,PAYPAL,MBWAY',
+            'payment_type' => 'required|string|in:VISA,PAYPAL,MBWAY', // VERIFICATION FOR PAYMENT SERVICE
             'payment_reference' => 'required|string',
             'points_used' => 'nullable|numeric|min:0',
             'cart' => 'required|array:id,quantity,note',

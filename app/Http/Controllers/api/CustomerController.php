@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Helpers\OrderHelper;
 use App\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\CustomerPostRequest;
@@ -34,6 +35,12 @@ class CustomerController extends Controller
     public function store(CustomerPostRequest $request)
     {
         $newCustomer = $request->validated();
+
+        if ($request->has('default_payment_reference')) {
+            $resValPay = OrderHelper::validatePaymentInfo($newCustomer["default_payment_type"], $newCustomer["default_payment_reference"]);
+            if ($resValPay['status'] !== true)
+                return response(['message' => $resValPay['message']], 422);
+        }
 
         $newUser = [
             "name" => $newCustomer["name"],
@@ -69,6 +76,12 @@ class CustomerController extends Controller
             return response(['message' => 'You are not a customer! To update your account please use the ' . route('update-employee-profile') . ' route'], 403);
 
         $newCustomer = $request->validated();
+
+        if ($request->has('default_payment_reference')) {
+            $resValPay = OrderHelper::validatePaymentInfo($newCustomer["default_payment_type"], $newCustomer["default_payment_reference"]);
+            if ($resValPay['status'] !== true)
+                return response(['message' => $resValPay['message']], 422);
+        }
 
         $newUser = [
             "name" => $newCustomer["name"]
