@@ -34,7 +34,7 @@ class OrderController extends Controller
     {
         $newOrder = $request->validated();
 
-        $cart = $newOrder["cart"];
+        $cart = json_decode($newOrder["cart"]);
         $productArray = [];
 
         $totalPrice = 0;
