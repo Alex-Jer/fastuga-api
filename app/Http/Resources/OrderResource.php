@@ -14,6 +14,20 @@ class OrderResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return array_merge([
+            'id' => $this->id,
+            'ticket_number' => $this->ticket_number,
+            'status' => $this->status,
+            'customer_id' => $this->customer_id,
+            'total_price' => $this->total_price,
+            'total_paid' => $this->total_paid,
+            'total_paid_with_points' => $this->total_paid_with_points,
+            'points_gained' => $this->points_gained,
+            'points_used_to_pay' => $this->points_used_to_pay,
+            'payment_type' => $this->payment_type,
+            'payment_reference' => $this->payment_reference,
+            'date' => $this->date,
+            'delivered_by' => $this->delivered_by,
+        ], ['products' => OrderItemResource::collection($this->items)]);
     }
 }
