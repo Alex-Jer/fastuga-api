@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\CustomerController;
+use App\Http\Controllers\api\OrderController;
 use App\Http\Controllers\api\ProductController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Resources\CustomerResource;
@@ -85,4 +86,8 @@ Route::prefix('products')->controller(ProductController::class)->group(function 
         Route::put('/{product}', 'update');
         Route::delete('/{product}', 'destroy');
     });
+});
+
+Route::prefix('orders')->controller(OrderController::class)->group(function () {
+    Route::post('/', 'store');
 });

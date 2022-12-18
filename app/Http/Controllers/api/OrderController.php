@@ -4,13 +4,16 @@ namespace App\Http\Controllers\api;
 
 use App\Helpers\OrderHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\OrderPostRequest;
+use App\Http\Requests\Order\OrderPostRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use Date;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class OrderController extends Controller
 {
@@ -34,16 +37,32 @@ class OrderController extends Controller
     {
         $newOrder = $request->validated();
 
-        $cart = json_decode($newOrder["cart"]);
+        $cartJson = json_decode($newOrder["cart"]);
+        $cart = [];
         $productArray = [];
 
         $totalPrice = 0;
 
-        foreach ($cart as $product) {
-            $thisProd = Product::where("id", $product["id"])->firstOrFail(); //TODO: test this
+        if (count($cartJson) == 0)
+            return response(["message" => "Cart is empty"], 422);
+
+        foreach ($cartJson as $product) {
+            if (!array_key_exists("quantity", $product) || !array_key_exists("id", $product))
+                continue;
+            $cart[] = $product;
+
+            try {
+                $thisProd = Product::where("id", $product["id"])->firstOrFail();
+            } catch (ModelNotFoundException $e) {
+                return response(["message" => "Product not found", "product_id" => $product["id"]], 404);
+            }
+
             $productArray[$product["id"]] = ["price" => $thisProd->price, "type" => $thisProd->type];
             $totalPrice += $thisProd->price * $product["quantity"];
         }
+
+        if (count($cart) == 0)
+            return response(["message" => "Cart is empty"], 422);
 
         if ($request->user() && $request->user()->customer) {
             $pointsUsed = $newOrder["points_used"] ?? 0;
@@ -87,7 +106,7 @@ class OrderController extends Controller
                     "product_id" => $product["id"],
                     "price" => $productArray[$product["id"]]["price"],
                     "status" => $productArray[$product["id"]]["type"] === "hot dish" ? 'W' : 'R',
-                    'notes' => $product["notes"]
+                    'notes' => $product["notes"] ?? null
                 ]);
             }
         }

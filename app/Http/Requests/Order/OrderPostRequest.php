@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -27,7 +27,7 @@ class OrderPostRequest extends FormRequest
             'payment_type' => 'required|string|in:VISA,PAYPAL,MBWAY', // VERIFICATION FOR PAYMENT SERVICE
             'payment_reference' => 'required|string',
             'points_used' => 'nullable|numeric|min:0',
-            'cart' => 'required|array:id,quantity,note',
+            'cart' => 'required|json',
         ];
     }
 }
