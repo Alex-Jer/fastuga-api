@@ -24,7 +24,6 @@ class OrderPostRequest extends FormRequest
     public function rules()
     {
         return [
-            'customer' => 'nullable|numeric|exists:customers,id|required_with:points_used',
             'payment_type' => 'required|string|in:VISA,PAYPAL,MBWAY',
             'payment_reference' => 'required|string',
             'points_used' => 'nullable|numeric|min:0',

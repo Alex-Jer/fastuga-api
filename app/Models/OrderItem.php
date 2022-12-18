@@ -20,7 +20,6 @@ class OrderItem extends Model
         'product_id',
         'status',
         'price',
-        'preparation_by',
         'notes',
     ];
 
