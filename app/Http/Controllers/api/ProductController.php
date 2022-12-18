@@ -8,6 +8,7 @@ use App\Http\Requests\ProductPostRequest;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use DB;
 use Illuminate\Http\Request;
 use Storage;
 
@@ -39,7 +40,7 @@ class ProductController extends Controller
         if (!$request->hasFile('photo'))
             return response(['message' => 'You must provide a photo for your new product'], 422);
 
-        $newProduct['photo_url'] = basename($request->file('photo')->store($this->storage_loc));
+        $newProduct['photo_url'] = basename($request->file('photo')->store(self::storage_loc));
         unset($newProduct['photo']);
 
         return response(["message" => "Product created", "product" => new ProductResource(Product::create($newProduct))]);
@@ -68,11 +69,11 @@ class ProductController extends Controller
         $newProduct = $request->validated();
 
         if ($request->hasFile('photo')) {
-            $newProduct['photo_url'] = basename($request->file('photo')->store($this->storage_loc));
+            $newProduct['photo_url'] = basename($request->file('photo')->store(self::storage_loc));
             unset($newProduct['photo']);
 
             //Delete previous photo
-            $product->photo_url ? Storage::delete($this->storage_loc . '/' . $product->photo_url) : null;
+            $product->photo_url ? Storage::delete(self::storage_loc . '/' . $product->photo_url) : null;
         }
 
         //prevent updating type
@@ -92,5 +93,10 @@ class ProductController extends Controller
     {
         $product->delete();
         return response(['message' => 'Product removed']);
+    }
+
+    public function allTypes()
+    {
+        return Product::select("type")->distinct()->get();
     }
 }

@@ -12,4 +12,8 @@ class OrderHelper
             self::$currTickNumber = 0;
         return self::$currTickNumber++;
     }
+
+    /*public static processPayment($type, $reference, $value){
+
+    }*/
 }

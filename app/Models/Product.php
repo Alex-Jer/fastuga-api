@@ -11,6 +11,7 @@ class Product extends Model
     use HasFactory, SoftDeletes;
 
     protected $dates = ['updated_at', 'created_at', 'deleted_at'];
+    protected $table = 'products';
 
     /**
      * The attributes that are mass assignable.
