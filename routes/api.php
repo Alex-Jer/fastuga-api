@@ -78,6 +78,8 @@ Route::prefix('orders')->controller(OrderController::class)->group(function () {
             Route::patch('/cancel', 'cancel')->middleware('scope:cancel-orders');
             Route::patch('/dish/{item}/prepare', 'prepareDish')->middleware('scope:prepare-dishes');
             Route::patch('/dish/{item}/finish', 'finishDish')->middleware('scope:prepare-dishes');
+            Route::patch('/finish', 'finishOrder')->middleware('scope:complete-orders');
+            Route::patch('/deliver', 'deliverOrder')->middleware('scope:deliver-orders');
         });
     });
 });

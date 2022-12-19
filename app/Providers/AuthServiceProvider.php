@@ -36,7 +36,7 @@ class AuthServiceProvider extends ServiceProvider
             'cancel-orders' => 'Cancel orders',
             'manage-users' => 'Manage users',
             'manage-products' => 'Manage products',
-            'complete-order' => 'Complete order',
+            'complete-orders' => 'Complete order',
         ]);
     }
 }

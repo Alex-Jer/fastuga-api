@@ -224,4 +224,27 @@ class OrderController extends Controller
 
         return response(['message' => 'Set dish state to ready']);
     }
+
+    public function finishOrder(Order $order)
+    {
+        if ($order->status !== 'P')
+            return response(['message' => 'This order is not preparing'], 422);
+
+        $order->status = 'R';
+        $order->save();
+
+        return response(['message' => 'Set order state to ready']);
+    }
+
+    public function deliverOrder(Request $request, Order $order)
+    {
+        if ($order->status !== 'R')
+            return response(['message' => 'This order ' . ($order->status == 'D' ? 'has already been delivered' : 'isn\'t ready to be delivered')], 422);
+
+        $order->status = 'D';
+        $order->delivered_by = $request->user()->id;
+        $order->save();
+
+        return response(['message' => 'Set order state to delivered']);
+    }
 }
