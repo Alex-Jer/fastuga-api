@@ -230,6 +230,9 @@ class OrderController extends Controller
         if ($order->status !== 'P')
             return response(['message' => 'This order is not preparing'], 422);
 
+        if ($order->items->where('status', '!=', 'R')->count() > 0)
+            return response(['message' => 'There are still dishes associated with this order that haven\'t been prepared'], 422);
+
         $order->status = 'R';
         $order->save();
 
