@@ -96,13 +96,13 @@ class UserController extends Controller
         return response(['status' => false, 'message' => 'User\'s email is not verified']);
     }*/
 
-    public function verifyMyEmail(Request $request)
+    /*public function verifyMyEmail(Request $request)
     {
         if ($request->user()->email_verified_at)
             return response(['message' => 'User\'s email is already verified'], 400);
         $request->user()->sendEmailVerificationNotification();
         return response(['message' => 'Verification email sent']);
-    }
+    }*/
 
     public function changePassword(Request $request)
     {

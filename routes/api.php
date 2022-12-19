@@ -29,11 +29,11 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::prefix('users/me')->group(function () {
-    Route::get('/email/verify', function () {
+    /*Route::get('/email/verify', function () {
         //  Only used when a logged in user tries to access a "verified" middleware protected route
         // (currently unused)
         return response(['message' => 'User\'s email is not verified. Cannot complete requested action.'], 403);
-    })->name('verification.notice');
+    })->name('verification.notice');*/
 
     /*Route::get('/forgot-password', 'forgotPassword')->name('password.email');
     Route::post('/reset-password/{token}', function ($token) {
@@ -48,12 +48,12 @@ Route::prefix('users')->controller(UserController::class)->middleware('auth:api'
         Route::patch('/password', 'changePassword');
         Route::patch('/email', 'changeEmail');
 
-        Route::patch('/email/verify', 'verifyMyEmail')->name('verification.send');
+        /*Route::patch('/email/verify', 'verifyMyEmail')->name('verification.send');
         Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
             $request->fulfill();
 
             return response(['message' => 'Your email was successfully verified'], 200);
-        })->middleware('signed')->name('verification.verify');
+        })->middleware('signed')->name('verification.verify');*/
     });
 
 
