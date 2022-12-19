@@ -35,7 +35,8 @@ class Order extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'date' => 'datetime'
+        'date' => 'datetime',
+        'custom' => 'json'
     ];
 
     public function customer()
@@ -56,5 +57,13 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function cancelReason()
+    {
+        if (isset($this->custom))
+            if (array_key_exists('cancel_reason', $this->custom))
+                return $this->custom['cancel_reason'];
+        return null;
     }
 }

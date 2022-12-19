@@ -155,10 +155,15 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function cancel(Order $order)
+    public function cancel(Request $request, Order $order)
     {
         if ($order->status === 'C')
             return response(['message' => 'This order was already cancelled'], 422);
+
+        $validated = $request->validate([
+            'reason' => 'nullable|string|max:255'
+        ]);
+
         $res = OrderHelper::processRefund($order->payment_type, $order->payment_reference, $order->total_paid);
 
         if ($order->customer) {
@@ -167,6 +172,8 @@ class OrderController extends Controller
         }
 
         $order->status = 'C';
+        if ($validated['reason'] && $validated['reason'] !== '')
+            $order->custom = json_encode(['cancel_reason' => $validated['reason']]);
         $order->save();
 
         if ($res['status'] == false)

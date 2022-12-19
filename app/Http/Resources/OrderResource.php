@@ -28,6 +28,7 @@ class OrderResource extends JsonResource
             'payment_reference' => $this->payment_reference,
             'date' => $this->date,
             'delivered_by' => $this->delivered_by,
+            'cancel_reason' => $this->cancelReason(),
         ], ['products' => OrderItemResource::collection($this->items)]);
     }
 }
