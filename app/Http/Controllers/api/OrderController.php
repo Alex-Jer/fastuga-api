@@ -152,29 +152,24 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        return new OrderResource($order);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Order $order)
+    public function cancel(Order $order)
     {
-        //
-    }
+        $res = OrderHelper::processRefund($order->payment_type, $order->payment_reference, $order->total_paid);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Order $order)
-    {
-        //
+        if ($order->customer) {
+            $order->customer->points += $order->points_used_to_pay;
+            $order->customer->save();
+        }
+
+        $order->status = 'C';
+        $order->save();
+
+        if ($res['status'] == false)
+            return response(['message' => 'Order cancelled but refund failed: ' . $res['message']], 402);
+        else
+            return response(['message' => 'Order cancelled']);
     }
 }

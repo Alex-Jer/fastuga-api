@@ -37,7 +37,6 @@ Route::prefix('users')->controller(UserController::class)->middleware('auth:api'
     });
 
 
-    /*Route::put('/me', 'updateMe');*/
     Route::middleware('scope:manage-users')->group(function () {
         Route::post('/', 'store'); //Register a new employee
         Route::get('/', 'allUsers');
@@ -70,4 +69,9 @@ Route::prefix('products')->controller(ProductController::class)->group(function 
 
 Route::prefix('orders')->controller(OrderController::class)->group(function () {
     Route::post('/', 'store');
+    Route::middleware('auth:api')->group(function () {
+        //Route::get('/', 'allOrders');
+        Route::get('/{order}', 'show')->middleware('scope:view-orders');
+        Route::patch('/{order}/cancel', 'cancel')->middleware('scope:cancel-orders');
+    });
 });
