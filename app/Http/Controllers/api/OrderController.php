@@ -158,7 +158,7 @@ class OrderController extends Controller
     public function cancel(Order $order)
     {
         if ($order->status === 'C')
-            return response(['message' => 'This order was already cancelled'], 400);
+            return response(['message' => 'This order was already cancelled'], 422);
         $res = OrderHelper::processRefund($order->payment_type, $order->payment_reference, $order->total_paid);
 
         if ($order->customer) {
@@ -173,5 +173,48 @@ class OrderController extends Controller
             return response(['message' => 'Order was cancelled but refund failed: ' . $res['message']], 402);
         else
             return response(['message' => 'Order cancelled']);
+    }
+
+    public function isDishInvalid(Order $order, OrderItem $item)
+    {
+        if ($order->id !== $item->order->id)
+            return response(['message' => 'This item does not belong to this order'], 400);
+        if ($order->status !== 'P')
+            return response(['message' => 'This order is no longer preparing'], 422);
+        if ($item->product->type !== 'hot dish')
+            return response(['message' => 'This item is not a hot dish'], 422);
+        return false;
+    }
+
+    public function prepareDish(Request $request, Order $order, OrderItem $item)
+    {
+        $isInvalid = $this->isDishInvalid($order, $item);
+        if ($isInvalid)
+            return $isInvalid;
+
+        if ($item->status !== 'W')
+            return response(['message' => 'This dish is already ' . ($item->status === 'R' ? 'ready' : 'preparing')], 422);
+
+        $item->status = 'P';
+        $item->preparation_by = $request->user()->id;
+        $item->save();
+
+        return response(['message' => 'Set dish state to preparing']);
+    }
+
+    public function finishDish(Request $request, Order $order, OrderItem $item)
+    {
+        $isInvalid = $this->isDishInvalid($order, $item);
+        if ($isInvalid)
+            return $isInvalid;
+
+        if ($item->status !== 'P')
+            return response(['message' => 'This dish ' . ($item->status === 'W' ? 'hasn\'t been prepared yet' : 'is already marked as ready')], 422);
+
+        $item->status = 'R';
+        $item->preparation_by = $request->user()->id;
+        $item->save();
+
+        return response(['message' => 'Set dish state to ready']);
     }
 }

@@ -54,7 +54,7 @@ Route::prefix('customers')->controller(CustomerController::class)->group(functio
     Route::post('/', 'store')->name('register-customer'); //Register clients
     Route::middleware('auth:api')->group(function () {
         Route::put('/me', 'updateCustomer')->name('update-customer-profile');
-        //Route::get('/', 'allCostumers'); //TODO: is this needed?
+        Route::get('/', 'allCostumers'); //TODO: is this needed?
     });
 });
 
@@ -73,7 +73,11 @@ Route::prefix('orders')->controller(OrderController::class)->group(function () {
     Route::post('/', 'store');
     Route::middleware('auth:api')->group(function () {
         //Route::get('/', 'allOrders');
-        Route::get('/{order}', 'show')->middleware('scope:view-orders');
-        Route::patch('/{order}/cancel', 'cancel')->middleware('scope:cancel-orders');
+        Route::prefix('/{order}')->group(function () {
+            Route::get('/', 'show')->middleware('scope:view-orders');
+            Route::patch('/cancel', 'cancel')->middleware('scope:cancel-orders');
+            Route::patch('/dish/{item}/prepare', 'prepareDish')->middleware('scope:prepare-dishes');
+            Route::patch('/dish/{item}/finish', 'finishDish')->middleware('scope:prepare-dishes');
+        });
     });
 });
