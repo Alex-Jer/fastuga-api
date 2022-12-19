@@ -77,13 +77,16 @@ class OrderController extends Controller
         if (count($cart) == 0)
             return response(["message" => "Cart is empty"], 422);
 
-        if ($usr) {
-            $pointsUsed = $newOrder["points_used"] ?? 0;
-            $pointsUsed = floor($pointsUsed / 10) * 10; //floor to nearest 10 in case someone tries to spend points not in 10 points blocks
+        $pointsUsed = $newOrder["points_used"] ?? 0;
+        if ($usr && $pointsUsed > 0) {
+            if ($pointsUsed % 10 != 0)
+                return response(["message" => "Points must be used in batches of 10"], 422);
 
             $eur_per_10_pts = OrderHelper::EUR_PER_10_POINTS;
-            $pointsUsed = ($pointsUsed / 10) * $eur_per_10_pts > $totalPrice ? floor($totalPrice / $eur_per_10_pts) * 10 : $pointsUsed; //if points used are more than total price, set points used to total price
-            //TODO: voltar atrás quando excede prob, falar com stor
+
+            if (($pointsUsed / 10) * $eur_per_10_pts > $totalPrice)
+                return response(["message" => "Points used exceed total price"], 422);
+
             $cstmr = $usr->customer;
 
             if ($pointsUsed > 0) {

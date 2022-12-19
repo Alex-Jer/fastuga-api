@@ -41,6 +41,9 @@ class UserController extends Controller
     {
         $newUser = $request->validated();
 
+        if ($user->type == 'C' && $request->user()->id !== $user->id)
+            return response(['message' => 'You cannot update a customer\'s account'], 403);
+
         UserHelper::updateUser($request, $newUser, $user);
 
         return response(['message' => 'User updated']);
