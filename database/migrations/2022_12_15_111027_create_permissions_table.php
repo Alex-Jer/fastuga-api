@@ -19,10 +19,10 @@ return new class extends Migration
         });
 
         DB::table('permissions')->insert([
-            ['type' => 'C', 'permissions' => 0],
-            ['type' => 'EC', 'permissions' => 3],
-            ['type' => 'ED', 'permissions' => 5],
-            ['type' => 'EM', 'permissions' => 57],
+            ['type' => 'C', 'permissions' => 0], // 0 = 0000000
+            ['type' => 'EC', 'permissions' => 3], // 3 = 0000011
+            ['type' => 'ED', 'permissions' => 69], // 69 = 1000101
+            ['type' => 'EM', 'permissions' => 57], // 57 = 0111001
         ]);
     }
 

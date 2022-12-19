@@ -20,11 +20,12 @@ return new class extends Migration
 
         DB::table('scopes')->insert([
             ['id' => 0, 'scope_name' => 'view-orders'],
-            ['id' => 1, 'scope_name' => 'prepare-orders'],
+            ['id' => 1, 'scope_name' => 'prepare-dishes'],
             ['id' => 2, 'scope_name' => 'deliver-orders'],
             ['id' => 3, 'scope_name' => 'cancel-orders'],
             ['id' => 4, 'scope_name' => 'manage-users'],
             ['id' => 5, 'scope_name' => 'manage-products'],
+            ['id' => 6, 'scope_name' => 'complete-orders'],
         ]);
     }
 

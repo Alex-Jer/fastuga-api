@@ -31,11 +31,12 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::tokensCan([
             'view-orders' => 'View orders',
-            'prepare-orders' => 'Prepare orders',
+            'prepare-dishes' => 'Prepare dishes',
             'deliver-orders' => 'Deliver orders',
             'cancel-orders' => 'Cancel orders',
             'manage-users' => 'Manage users',
             'manage-products' => 'Manage products',
+            'complete-order' => 'Complete order',
         ]);
     }
 }
