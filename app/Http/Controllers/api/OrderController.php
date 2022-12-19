@@ -157,6 +157,8 @@ class OrderController extends Controller
 
     public function cancel(Order $order)
     {
+        if ($order->status === 'C')
+            return response(['message' => 'This order was already cancelled'], 400);
         $res = OrderHelper::processRefund($order->payment_type, $order->payment_reference, $order->total_paid);
 
         if ($order->customer) {
@@ -168,7 +170,7 @@ class OrderController extends Controller
         $order->save();
 
         if ($res['status'] == false)
-            return response(['message' => 'Order cancelled but refund failed: ' . $res['message']], 402);
+            return response(['message' => 'Order was cancelled but refund failed: ' . $res['message']], 402);
         else
             return response(['message' => 'Order cancelled']);
     }
