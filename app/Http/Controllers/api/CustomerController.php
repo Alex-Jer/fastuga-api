@@ -98,6 +98,6 @@ class CustomerController extends Controller
 
         $request->user()->customer->update($newCustomer);
 
-        return response(['message' => 'User updated']);
+        return response(['message' => 'User updated', 'user' => new UserResource($request->user())]);
     }
 }

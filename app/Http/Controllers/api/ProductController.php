@@ -81,7 +81,7 @@ class ProductController extends Controller
         //unset($newProduct['type']);
 
         $product->update($newProduct);
-        return response(['message' => 'Product updated']);
+        return response(['message' => 'Product updated', 'product' => new ProductResource($product)]);
     }
 
     /**

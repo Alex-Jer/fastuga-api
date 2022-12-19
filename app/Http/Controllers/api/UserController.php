@@ -46,7 +46,7 @@ class UserController extends Controller
 
         UserHelper::updateUser($request, $newUser, $user);
 
-        return response(['message' => 'User updated']);
+        return response(['message' => 'User updated', 'user' => new UserResource($user)]);
     }
 
     public function updateMe(UserPutRequest $request, User $user)
