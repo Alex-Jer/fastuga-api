@@ -66,4 +66,9 @@ class Order extends Model
                 return $this->custom['cancel_reason'];
         return null;
     }
+
+    public function allDishesReady()
+    {
+        return !($this->items->where('status', '!=', 'R')->count() > 0);
+    }
 }

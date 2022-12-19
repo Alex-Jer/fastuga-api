@@ -29,6 +29,7 @@ class OrderResource extends JsonResource
             'date' => $this->date,
             'delivered_by' => $this->delivered_by,
             'cancel_reason' => $this->cancelReason(),
+            'all_dishes_ready' => $this->allDishesReady(),
         ], ['products' => OrderItemResource::collection($this->items)]);
     }
 }
