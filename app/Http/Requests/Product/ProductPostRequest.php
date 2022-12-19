@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Product;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
-class ProductRequest extends FormRequest
+class ProductPostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,11 +25,11 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|unique:products,name,' . $this->id,
+            'name' => 'required|string|unique:products',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'type' => 'required|in:hot dish,cold dish,drink,dessert',
-            'photo' => 'nullable|image|max:8192',
+            'photo' => 'required|image|max:8192',
         ];
     }
 }
