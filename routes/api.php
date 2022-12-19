@@ -25,7 +25,9 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::delete('logout', 'logout')->middleware('auth:api');
     Route::get('test', 'test')->middleware('auth:api');
-    //Route::get('scopes', 'scopes')->middleware('auth:api');
+
+    /*Route::get('scopes', 'scopes')->middleware('auth:api');
+    Route::get('allScopes', 'testAllScopes')->middleware('auth:api');*/
 });
 
 Route::prefix('users')->controller(UserController::class)->middleware('auth:api')->group(function () {

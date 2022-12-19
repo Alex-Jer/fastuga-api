@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,11 +32,6 @@ class AuthController extends Controller
         return response(['message' => 'Login was successfull', 'user' => new UserResource($authUser), 'access_token' => $accessToken]);
     }
 
-    // public function scopes()
-    // {
-    //     return Auth::user()->scopes();
-    // }
-
     public function logout(Request $request)
     {
         $accessToken = $request->user()->token();
@@ -45,8 +41,28 @@ class AuthController extends Controller
         return response(['message' => 'Token revoked']);
     }
 
+    /*
+    public function scopes()
+    {
+        return Auth::user()->scopes();
+    }
+
+    public function testAllScopes(Request $request)
+    {
+        $typesArr = User::select("type")->distinct()->get();
+        $types = [];
+        foreach ($typesArr as $type) {
+            $types[] = $type->type;
+        }
+        $str = [];
+        foreach ($types as $type) {
+            $str[] = User::where("type", $type)->first()->scopes();
+        }
+        return response($str);
+    }
+    */
     public function test(Request $request)
     {
-        return response(['message' => 'Test was successfull']);
+        return response(["message" => "Test was successful"]);
     }
 }

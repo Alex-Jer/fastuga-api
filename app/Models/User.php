@@ -80,7 +80,7 @@ class User extends Authenticatable
     {
         $perms = $this->perms();
         $scopes = [];
-        for ($i = 0; $i <= 5; $i++) {
+        for ($i = 0; $i <= DB::table('scopes')->get()->count(); $i++) {
             if ($perms & (1 << $i)) {
                 $scopes[] = DB::table('scopes')->where('id', '=', $i)->get()[0]->scope_name;
             }
