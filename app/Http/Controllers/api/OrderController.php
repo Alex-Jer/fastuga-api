@@ -231,7 +231,7 @@ class OrderController extends Controller
             return response(['message' => 'This order is not preparing'], 422);
 
         if (!$order->allDishesReady())
-            return response(['message' => 'There are still dishes associated with this order that haven\'t been prepared'], 422);
+            return response(['message' => 'There are still dishes associated with this order that haven\'t been prepared'], 403);
 
         $order->status = 'R';
         $order->save();
