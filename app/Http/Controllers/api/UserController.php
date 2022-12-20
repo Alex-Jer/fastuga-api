@@ -144,6 +144,8 @@ class UserController extends Controller
         ]);
 
         $user = $request->user();
+        if ($user->email == $request->email)
+            return response(['message' => 'New email is the same as the old one'], 422);
         $user->email = $request->email;
         //$user->email_verified_at = null;
         $user->save();
