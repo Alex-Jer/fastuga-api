@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Helpers\OrderHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\OrderPostRequest;
+use App\Http\Resources\OrderItemResource;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -18,14 +19,23 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+
+    public function ordersPreparing()
     {
-        //
+        return OrderResource::collection(Order::where('status', 'P')->get());
+    }
+
+    public function ordersReady()
+    {
+        return OrderResource::collection(Order::where('status', 'R')->get());
+    }
+
+    public function preparableDishes()
+    {
+        return OrderItem::where('status', 'W')->orWhere('status', 'P')->get()->map(function ($orderItem) {
+            return ['order_id' => $orderItem->order->id, 'ticket_number' => $orderItem->order->ticket_number, 'item' => new OrderItemResource($orderItem)];
+        });;
     }
 
     /**
