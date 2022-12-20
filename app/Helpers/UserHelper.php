@@ -47,4 +47,21 @@ class UserHelper
 
         $user->update($newUser);
     }
+
+    public static function getTypeDesignation($type)
+    {
+        $ut = strtoupper($type);
+        switch ($ut) {
+            case 'C':
+                return 'Customer';
+            case 'EC':
+                return 'Chef';
+            case 'ED':
+                return 'Server';
+            case 'EM':
+                return 'Manager';
+            default:
+                return 'Unknown (' . $ut . ')';
+        }
+    }
 }

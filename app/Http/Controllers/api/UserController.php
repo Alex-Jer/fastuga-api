@@ -160,4 +160,14 @@ class UserController extends Controller
             ? response(['message' => "Sent a password recovery email"], 200)
             : response(["message" => "An error occurred", "errors" => ['email' => __($status)]], 422);
     }*/
+
+    public function allTypes()
+    {
+        $typesArr = User::select("type")->distinct()->get();
+        $types = [];
+        foreach ($typesArr as $type) {
+            $types[] = ['type' => $type->type, 'designation' => UserHelper::getTypeDesignation($type->type)];
+        }
+        return $types;
+    }
 }

@@ -41,7 +41,10 @@ Route::prefix('users')->controller(UserController::class)->middleware('auth:api'
 
     Route::middleware('scope:manage-users')->group(function () {
         Route::post('/', 'store'); //Register a new employee
+
         Route::get('/', 'allUsers');
+        Route::get('/types', 'allTypes');
+
         Route::get('/{user}', 'show');
         Route::put('/{user}', 'update');
         Route::delete('/{user}', 'destroy');
