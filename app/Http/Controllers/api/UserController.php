@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Helpers\StorageLocation;
 use App\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserPostRequest;
@@ -12,7 +11,6 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\Request;
-use Storage;
 
 class UserController extends Controller
 {
@@ -68,10 +66,6 @@ class UserController extends Controller
     {
         if ($request->user()->id == $user->id)
             return response(['message' => 'You cannot delete your own account'], 422);
-        if ($user->photo_url) {
-            Storage::delete(StorageLocation::USER_PHOTOS . '/' . $user->photo_url);
-            $user->photo_url = null;
-        }
         $user->delete();
         return response(['message' => 'User deleted']);
     }
