@@ -135,7 +135,7 @@ class UserController extends Controller
     public function changeEmail(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|confirmed|unique:users,email',
         ]);
 
         $user = $request->user();
