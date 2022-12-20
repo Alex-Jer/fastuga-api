@@ -64,24 +64,31 @@ class StatisticsController extends Controller
     public function managerStats(User $user)
     {
         //Top 10 pratos mais vendidos
-
         $bestDishes = OrderItem::withOrder()->where('orders.status', '!=', 'C')->groupBy('order_items.product_id')->select('order_items.product_id', DB::raw('count(*) as quantity'))->orderBy('quantity', 'desc')->limit(10)->get()->map(function ($orderItem) {
             $prod = $orderItem->product;
             if ($prod == null)
                 $prod = Product::withTrashed()->find($orderItem->product_id);
-            return ['product' => new ProductResource($prod), 'deleted' => ($orderItem->product ? false : true), 'quantity' => $orderItem->quantity];
+            return ['product' => ['id' => $prod->id, 'name' => $prod->name, 'photo_url' => $prod->photo_url, 'type' => $prod->type], 'deleted' => ($orderItem->product ? false : true), 'quantity' => $orderItem->quantity];
         });
 
         //Top 10 dias com mais orders
         $bestDays = Order::groupBy('date')->select('date', DB::raw('count(*) as quantity'))->orderBy('quantity', 'desc')->limit(10)->get();
 
         //Top 10 best customers
-        return Order::where('customer_id', "!=", 'null')->join('customers', 'customers.id', 'orders.customer_id')->groupBy('orders.customer_id')->select('orders.customer_id', DB::raw('count(*) as quantity'))->orderBy('quantity', 'desc')->limit(10)->get()->map(function ($order) {
-            $customer = Customer::withTrashed()->find($order->customer_id);
-            return ['user' => new UserResource($customer->user()), 'deleted' => ($order->customer ? false : true), 'quantity' => $customer->quantity];
+        $bestCustomers =  Order::where('customer_id', "!=", 'null')->join('customers', 'customers.id', 'orders.customer_id')->join('users', 'users.id', 'customers.user_id')->groupBy('orders.customer_id')->select('orders.customer_id', 'users.name', 'users.photo_url', 'users.deleted_at', 'customers.user_id', DB::raw('count(*) as quantity'))->orderBy('quantity', 'desc')->limit(10)->get()->map(function ($order) {
+            return [
+                'user' => [
+                    'id' => $order->user_id,
+                    'name' => $order->name,
+                    'photo_url' => $order->photo_url
+                ], 'deleted' => ($order->deleted_at ? false : true),
+                'quantity' => $order->quantity
+            ];
         });
-        //Top 10 best chefs/servers
-        //Top 10
-        return response(['message' => 'Not implemented yet'], 501);
+
+        //Top 10 dias mais profitable
+        $bestProfitDays = Order::groupBy('date')->select('date', DB::raw('SUM(total_paid) as money_made'))->orderBy('money_made', 'desc')->limit(10)->get();
+
+        return response(['best_dishes' => $bestDishes, 'best_days' => $bestDays, 'best_customers' => $bestCustomers, 'best_profit_days' => $bestProfitDays]);
     }
 }
