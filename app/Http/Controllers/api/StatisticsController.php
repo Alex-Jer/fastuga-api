@@ -48,8 +48,8 @@ class StatisticsController extends Controller
 
     public function delivererStats(User $user)
     {
-        $ordersDelivered = OrderItem::where('delivered_by', $user->id)->count();
-        $cancelledOrdersDelivered = OrderItem::where('delivered_by', $user->id)->where('status', 'C')->count();
+        $ordersDelivered = Order::where('delivered_by', $user->id)->count();
+        $cancelledOrdersDelivered = Order::where('delivered_by', $user->id)->where('status', 'C')->count();
         $notCancelledOrdersDelivered = $ordersDelivered - $cancelledOrdersDelivered;
         return response([
             'num_orders_delivered' =>
