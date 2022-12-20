@@ -151,12 +151,12 @@ class UserController extends Controller
 
         $user = $request->user();
         $user->email = $request->email;
-        $user->email_verified_at = null;
+        //$user->email_verified_at = null;
         $user->save();
 
         //$user->sendEmailVerificationNotification();
 
-        return response(['message' => 'Email changed! Verification email sent']);
+        return response(['message' => 'Email changed']);
     }
 
     /*public function forgotPassword(Request $request)
