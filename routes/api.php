@@ -4,6 +4,7 @@ use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\CustomerController;
 use App\Http\Controllers\api\OrderController;
 use App\Http\Controllers\api\ProductController;
+use App\Http\Controllers\api\StatisticsController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Resources\CustomerResource;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -92,4 +93,8 @@ Route::prefix('orders')->controller(OrderController::class)->group(function () {
             Route::patch('/deliver', 'deliverOrder')->middleware('scope:deliver-orders');
         });
     });
+});
+
+Route::prefix('statistics')->controller(StatisticsController::class)->middleware('auth:api')->group(function () {
+    Route::get('/', 'stats');
 });
