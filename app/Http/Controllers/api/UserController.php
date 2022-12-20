@@ -61,14 +61,18 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
+        if ($request->user()->id == $user->id)
+            return response(['message' => 'You cannot delete your own account'], 422);
         $user->delete();
         return response(['message' => 'User deleted']);
     }
 
-    public function block(User $user)
+    public function block(Request $request, User $user)
     {
+        if ($request->user()->id == $user->id)
+            return response(['message' => 'You cannot block your own account'], 422);
         if ($user->blocked)
             return response(['message' => 'That user is already blocked'], 400);
 
@@ -81,8 +85,10 @@ class UserController extends Controller
         return response(['message' => 'User blocked']);
     }
 
-    public function unblock(User $user)
+    public function unblock(Request $request, User $user)
     {
+        if ($request->user()->id == $user->id)
+            return response(['message' => 'You cannot unblock your own account'], 422);
         if (!$user->blocked)
             return response(['message' => 'That user is not blocked'], 400);
         $user->blocked = false;
