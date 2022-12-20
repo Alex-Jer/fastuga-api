@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CustomerResource extends JsonResource
+class MyCustomerResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -21,8 +21,8 @@ class CustomerResource extends JsonResource
             "phone" => $this->phone,
             "points" => $this->points,
             "nif" => $this->nif,
-            /*"default_payment_type" => $this->default_payment_type,
-            "default_payment_reference" => $this->default_payment_reference,*/
+            "default_payment_type" => $this->default_payment_type,
+            "default_payment_reference" => $this->default_payment_reference,
             /*"created_at" => $this->created_at,*/
         ];
     }

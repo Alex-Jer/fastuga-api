@@ -29,7 +29,7 @@ class AuthController extends Controller
 
         $accessToken = $authUser->createToken('authToken', $authUser->scopes())->accessToken;
 
-        return response(['message' => 'Login was successfull', 'user' => new UserResource($authUser), 'access_token' => $accessToken]);
+        return response(['message' => 'Login was successful', 'user' => new UserResource($authUser), 'access_token' => $accessToken]);
     }
 
     public function logout(Request $request)

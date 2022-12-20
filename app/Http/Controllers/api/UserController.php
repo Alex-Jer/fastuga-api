@@ -6,6 +6,7 @@ use App\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserPostRequest;
 use App\Http\Requests\User\UserPutRequest;
+use App\Http\Resources\MyUserResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Hash;
@@ -25,7 +26,7 @@ class UserController extends Controller
 
     public function showMe(Request $request)
     {
-        return new UserResource($request->user());
+        return new MyUserResource($request->user());
     }
 
     public function store(UserPostRequest $request)
