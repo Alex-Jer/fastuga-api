@@ -49,13 +49,11 @@ class UserController extends Controller
         return response(['message' => 'User updated', 'user' => new UserResource($user)]);
     }
 
-    public function updateMe(UserPutRequest $request, User $user)
+    public function updateMe(UserPutRequest $request)
     {
-        if ($user->type == 'C')
+        if ($request->user()->type == 'C')
             return response(['message' => 'To update your account as a customer please use the ' . route('update-customer-profile') . ' route'], 403);
-        if ($user->id !== $request->user()->id)
-            return response(['message' => 'You can only update your own account'], 403);
-        return $this->update($request, $user);
+        return $this->update($request, $request->user());
     }
 
     public function show(User $user)
