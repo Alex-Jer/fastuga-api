@@ -140,12 +140,12 @@ class UserController extends Controller
     public function changeEmail(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|confirmed|unique:users,email',
+            'email' => 'required|email|confirmed|unique:users,email,' . $request->user()->id,
         ]);
 
         $user = $request->user();
-        if ($user->email == $request->email)
-            return response(['message' => 'New email is the same as the old one'], 422);
+        // if ($user->email == $request->email)
+        //     return response(['message' => 'New email is the same as the old one'], 422);
         $user->email = $request->email;
         //$user->email_verified_at = null;
         $user->save();
