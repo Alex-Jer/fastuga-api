@@ -31,6 +31,14 @@ class OrderController extends Controller
         return OrderResource::collection(Order::where('status', 'R')->get());
     }
 
+    public function myOrders(Request $request)
+    {
+        if ($request->user()->type != 'C')
+            return response(['message' => 'Only customers can view their orders'], 403);
+
+        return OrderResource::collection(Order::where('customer_id', $request->user()->customer->id)->get());
+    }
+
     public function preparableDishes()
     {
         return OrderItem::where('status', 'W')->orWhere('status', 'P')->get()->map(function ($orderItem) {

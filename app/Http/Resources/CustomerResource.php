@@ -17,6 +17,7 @@ class CustomerResource extends JsonResource
         return [
             //remove redunctant field
             /*"user_id" => $this->user_id,*/
+            "customer_id" => $this->id,
             "phone" => $this->phone,
             "points" => $this->points,
             "nif" => $this->nif,
