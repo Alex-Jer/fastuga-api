@@ -18,7 +18,7 @@ class OrderResource extends JsonResource
             'id' => $this->id,
             'ticket_number' => $this->ticket_number,
             'status' => $this->status,
-            'customer_name' => ($this->customer ? $this->customer->user->name : null),
+            'customer_name' => ($this->customer ? $this->customer()->withTrashed()->get()[0]->user()->withTrashed()->get()[0]->name : null),
             'customer_photo_url' => ($this->customer ? $this->customer->user->photo_url : null),
             'total_price' => $this->total_price,
             'total_paid' => $this->total_paid,
