@@ -26,7 +26,6 @@ class MyOrderResource extends JsonResource
             'payment_type' => $this->payment_type,
             'payment_reference' => $this->payment_reference,
             'date' => $this->date,
-            'delivered_by' => $this->delivered_by,
             'cancel_reason' => $this->cancelReason(),
             'all_dishes_ready' => $this->allDishesReady(),
         ], ['items' => OrderItemResource::collection($this->items)]);

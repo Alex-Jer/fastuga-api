@@ -26,7 +26,7 @@ class OrderResource extends JsonResource
             'points_gained' => $this->points_gained,
             'points_used_to_pay' => $this->points_used_to_pay,
             'date' => $this->date,
-            'delivered_by' => $this->delivered_by,
+            'delivered_by' => ($this->delivered_by ? $this->delivered()->withTrashed()->get()[0]->name : null),
             'cancel_reason' => $this->cancelReason(),
             'all_dishes_ready' => $this->allDishesReady(),
         ], ['items' => OrderItemResource::collection($this->items)]);
