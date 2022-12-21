@@ -39,6 +39,11 @@ class OrderItem extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 
+    public function preparation()
+    {
+        return $this->belongsTo(User::class, 'preparation_by');
+    }
+
     public static function withOrder()
     {
         return OrderItem::join('orders', 'orders.id', 'order_items.order_id');

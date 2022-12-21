@@ -25,7 +25,7 @@ class OrderItemResource extends JsonResource
             ],
             'status' => $this->status,
             'price' => $this->price,
-            'preparation_by' => $this->preparation_by,
+            'preparation_by' => ($this->preparation_by ? $this->preparation()->withTrashed()->get()[0]->name : null),
             'notes' => $this->notes,
         ];
     }
