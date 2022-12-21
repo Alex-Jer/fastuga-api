@@ -19,9 +19,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function allUsers()
+    public function allUsers(Request $request)
     {
-        return UserResource::collection(User::all());
+        return UserResource::collection(User::paginate($request->get('per_page', 6), ['*'], 'page', $request->get('page', 1)));
     }
 
     public function showMe(Request $request)

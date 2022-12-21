@@ -84,7 +84,7 @@ Route::prefix('orders')->controller(OrderController::class)->group(function () {
     Route::get('/preparable-dishes', 'preparableDishes')->middleware(['auth:api', 'scope:prepare-dishes']);
 
     Route::middleware('auth:api')->group(function () {
-        //Route::get('/', 'allOrders');
+        Route::get('/', 'allOrders')->middleware('scope:cancel-orders');
         Route::prefix('/{order}')->middleware('auth:api')->group(function () {
             Route::get('/', 'show')->middleware('scope:view-orders');
             Route::patch('/cancel', 'cancel')->middleware('scope:cancel-orders');
