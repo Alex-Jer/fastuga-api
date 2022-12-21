@@ -14,7 +14,7 @@ class OrderResource extends JsonResource
      */
     public function toArray($request)
     {
-        $usr = $this->customer()->withTrashed()->get()[0]->user()->withTrashed()->get()[0];
+        $usr = ($this->customer_id ? $this->customer()->withTrashed()->get()[0]->user()->withTrashed()->get()[0] : null);
         return array_merge([
             'id' => $this->id,
             'ticket_number' => $this->ticket_number,
