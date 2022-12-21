@@ -37,12 +37,12 @@ class OrderController extends Controller
         if ($request->user()->type != 'C')
             return response(['message' => 'Only customers can view their orders'], 403);
 
-        return MyOrderResource::collection(Order::where('customer_id', $request->user()->customer->id)->paginate($request->get('per_page', 7), ['*'], 'page', $request->get('page', 1)));
+        return MyOrderResource::collection(Order::where('customer_id', $request->user()->customer->id)->orderBy('id', 'desc')->paginate($request->get('per_page', 10), ['*'], 'page', $request->get('page', 1)));
     }
 
     public function allOrders(Request $request)
     {
-        return OrderResource::collection(Order::paginate($request->get('per_page', 7), ['*'], 'page', $request->get('page', 1)));
+        return OrderResource::collection(Order::orderBy('id', 'desc')->paginate($request->get('per_page', 10), ['*'], 'page', $request->get('page', 1)));
     }
 
     public function preparableDishes()
