@@ -60,7 +60,9 @@ class CustomerController extends Controller
 
         $regCustomer = Customer::create($newCustomer);
 
-        return response(["message" => "Customer user created", "user" => new UserResource($regCustomer->user)]);
+        $accessToken = UserHelper::createAccessToken($regUser);
+
+        return response(["message" => "Customer user created", "user" => new UserResource($regCustomer->user), "access_token" => $accessToken]);
     }
 
     /**

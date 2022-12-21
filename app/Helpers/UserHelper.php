@@ -64,4 +64,9 @@ class UserHelper
                 return 'Unknown (' . $ut . ')';
         }
     }
+
+    public static function createAccessToken($authUser)
+    {
+        return $authUser->createToken('authToken', $authUser->scopes())->accessToken;
+    }
 }

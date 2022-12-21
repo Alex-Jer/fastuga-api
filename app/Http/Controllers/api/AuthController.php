@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -27,7 +28,7 @@ class AuthController extends Controller
             return response(['message' => 'This account is blocked from using our services'], 403);
         }
 
-        $accessToken = $authUser->createToken('authToken', $authUser->scopes())->accessToken;
+        $accessToken = UserHelper::createAccessToken($authUser);
 
         return response(['message' => 'Login was successful', 'user' => new UserResource($authUser), 'access_token' => $accessToken]);
     }
