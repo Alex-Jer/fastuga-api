@@ -14,10 +14,16 @@ class OrderItemResource extends JsonResource
      */
     public function toArray($request)
     {
+        $prod = $this->product()->withTrashed()->get()[0];
         return [
             'id' => $this->id,
             'order_local_number' => $this->order_local_number,
-            'product_id' => $this->product_id,
+            'product' => [
+                'name' => $prod->name,
+                'type' => $prod->type,
+                'photo_url' => $prod->photo_url,
+                'deleted' => ($prod->deleted_at ? true : false),
+            ],
             'status' => $this->status,
             'price' => $this->price,
             'preparation_by' => $this->preparation_by,

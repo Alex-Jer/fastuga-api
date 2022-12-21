@@ -78,6 +78,7 @@ Route::prefix('orders')->controller(OrderController::class)->group(function () {
     Route::get('/ready', 'ordersReady');
 
     Route::get('/me', 'myOrders')->middleware('auth:api');
+    Route::get('/me/{order}', 'showMy')->middleware('auth:api');
 
     Route::get('/preparing', 'ordersPreparing')->middleware(['auth:api', 'scope:complete-orders']); //Apenas os servers vao necessitar de ver esta informação por isso complete-orders como scope é válido
     Route::get('/preparable-dishes', 'preparableDishes')->middleware(['auth:api', 'scope:prepare-dishes']);

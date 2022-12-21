@@ -18,7 +18,6 @@ class MyOrderResource extends JsonResource
             'id' => $this->id,
             'ticket_number' => $this->ticket_number,
             'status' => $this->status,
-            'customer_id' => $this->customer_id,
             'total_price' => $this->total_price,
             'total_paid' => $this->total_paid,
             'total_paid_with_points' => $this->total_paid_with_points,

@@ -174,6 +174,21 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function showMy(Request $request, Order $order)
+    {
+        if ($request->user()->type != 'C')
+            return response(['message' => 'Only customers can view their orders'], 403);
+        if ($order->customer_id != $request->user()->customer->id)
+            return response(['message' => 'This order does not belong to you'], 403);
+        return new OrderResource($order);
+    }
+
     public function cancel(Request $request, Order $order)
     {
         if ($order->status === 'C')
