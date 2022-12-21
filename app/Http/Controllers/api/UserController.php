@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function allUsers(Request $request)
     {
-        return UserResource::collection(User::paginate($request->get('per_page', 6), ['*'], 'page', $request->get('page', 1)));
+        return UserResource::collection(User::paginate($request->get('per_page', 7), ['*'], 'page', $request->get('page', 1)));
     }
 
     public function showMe(Request $request)
