@@ -75,7 +75,7 @@ class UserController extends Controller
         if ($request->user()->id == $user->id)
             return response(['message' => 'You cannot block your own account'], 422);
         if ($user->blocked)
-            return response(['message' => 'That user is already blocked'], 400);
+            return response(['message' => 'That user is already blocked'], 422);
 
         $user->blocked = true;
 
@@ -91,7 +91,7 @@ class UserController extends Controller
         if ($request->user()->id == $user->id)
             return response(['message' => 'You cannot unblock your own account'], 422);
         if (!$user->blocked)
-            return response(['message' => 'That user is not blocked'], 400);
+            return response(['message' => 'That user is not blocked'], 422);
         $user->blocked = false;
         $user->save();
         return response(['message' => 'User unblocked']);
