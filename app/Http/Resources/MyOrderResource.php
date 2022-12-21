@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderResource extends JsonResource
+class MyOrderResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -24,6 +24,8 @@ class OrderResource extends JsonResource
             'total_paid_with_points' => $this->total_paid_with_points,
             'points_gained' => $this->points_gained,
             'points_used_to_pay' => $this->points_used_to_pay,
+            'payment_type' => $this->payment_type,
+            'payment_reference' => $this->payment_reference,
             'date' => $this->date,
             'delivered_by' => $this->delivered_by,
             'cancel_reason' => $this->cancelReason(),

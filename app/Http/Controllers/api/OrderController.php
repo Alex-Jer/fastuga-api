@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Helpers\OrderHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\OrderPostRequest;
+use App\Http\Resources\MyOrderResource;
 use App\Http\Resources\OrderItemResource;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
@@ -36,7 +37,7 @@ class OrderController extends Controller
         if ($request->user()->type != 'C')
             return response(['message' => 'Only customers can view their orders'], 403);
 
-        return OrderResource::collection(Order::where('customer_id', $request->user()->customer->id)->get());
+        return MyOrderResource::collection(Order::where('customer_id', $request->user()->customer->id)->get());
     }
 
     public function preparableDishes()
