@@ -20,7 +20,6 @@ class OrderItemResource extends JsonResource
             'order_local_number' => $this->order_local_number,
             'product' => [
                 'name' => $prod->name,
-                'type' => $prod->type,
                 'photo_url' => $prod->photo_url,
                 'deleted' => ($prod->deleted_at ? true : false),
             ],
