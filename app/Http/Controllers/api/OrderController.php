@@ -47,7 +47,7 @@ class OrderController extends Controller
 
     public function preparableDishes()
     {
-        $query = OrderItem::where('order_items.status', 'W')->where('orders.status', 'P')->orWhere('order_items.status', 'P')->join('orders', 'orders.id', 'order_items.order_id')->where('orders.status', 'P')->get();
+        $query = OrderItem::where('order_items.status', 'W')->where('orders.status', 'P')->orWhere('order_items.status', 'P')->join('orders', 'orders.id', 'order_items.order_id')->where('orders.status', 'P')->select('order_items.*')->get();
         /*if ($query->count() == 0)
             return response(['message' => 'No orders to prepare'], 404);*/
         return $query->map(function ($orderItem) {
@@ -270,7 +270,7 @@ class OrderController extends Controller
         $item->preparation_by = $request->user()->id;
         $item->save();
 
-        return response(['message' => 'Set dish state to ready']);
+        return response(['message' => 'Set dish state to ready', 'all_dishes_ready' => $order->allDishesReady()]);
     }
 
     public function finishOrder(Order $order)

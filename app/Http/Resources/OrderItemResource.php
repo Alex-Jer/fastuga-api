@@ -21,6 +21,7 @@ class OrderItemResource extends JsonResource
             'product' => [
                 'name' => $prod->name,
                 'photo_url' => $prod->photo_url,
+                'type' => $prod->type,
                 'deleted' => ($prod->deleted_at ? true : false),
             ],
             'status' => $this->status,
