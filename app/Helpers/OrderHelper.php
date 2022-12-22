@@ -71,7 +71,7 @@ class OrderHelper
         if (!$resValPay['status'])
             return $resValPay;
 
-        $data = array('type' => strtolower($type), 'reference' => $reference, 'value' => $value);
+        $data = array('type' => strtolower($type), 'reference' => $reference, 'value' => doubleval($value));
         $client = new Client(['verify' => false, 'http_errors' => false]);
         $headers = [
             'Accept' => 'application/json',
