@@ -127,9 +127,12 @@ class OrderController extends Controller
 
             $newOrder['points_gained'] = floor($totalPrice / 10);
         } else {
+            $newOrder['points_gained'] = 0;
+        }
+
+        if (!$usr || $pointsUsed == 0) {
             $newOrder['points_used_to_pay'] = 0;
             $newOrder['total_paid_with_points'] = 0;
-            $newOrder['points_gained'] = 0;
         }
 
         $ticketNumber = OrderHelper::nextTicketNumber();
