@@ -214,7 +214,7 @@ class OrderController extends Controller
         }
 
         $order->status = 'C';
-        if ($validated['reason'] && $validated['reason'] !== '')
+        if (array_key_exists('reason', $validated) && $validated['reason'] !== '')
             $order->custom = json_encode(['cancel_reason' => $validated['reason']]);
         $order->save();
 
