@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\MyUserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +30,7 @@ class AuthController extends Controller
 
         $accessToken = UserHelper::createAccessToken($authUser);
 
-        return response(['message' => 'Login was successful', 'user' => new UserResource($authUser), 'access_token' => $accessToken]);
+        return response(['message' => 'Login was successful', 'user' => new MyUserResource($authUser), 'access_token' => $accessToken]);
     }
 
     public function logout(Request $request)

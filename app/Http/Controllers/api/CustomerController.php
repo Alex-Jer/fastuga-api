@@ -7,7 +7,7 @@ use App\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\CustomerPostRequest;
 use App\Http\Requests\User\CustomerPutRequest;
-use App\Http\Resources\CustomerResource;
+use App\Http\Resources\MyUserResource;
 use App\Http\Resources\UserResource;
 use App\Models\Customer;
 use App\Models\User;
@@ -62,7 +62,7 @@ class CustomerController extends Controller
 
         $accessToken = UserHelper::createAccessToken($regUser);
 
-        return response(["message" => "Customer user created", "user" => new UserResource($regCustomer->user), "access_token" => $accessToken]);
+        return response(["message" => "Customer user created", "user" => new MyUserResource($regCustomer->user), "access_token" => $accessToken]);
     }
 
     /**
@@ -100,6 +100,6 @@ class CustomerController extends Controller
 
         $request->user()->customer->update($newCustomer);
 
-        return response(['message' => 'User updated', 'user' => new UserResource($request->user())]);
+        return response(['message' => 'User updated', 'user' => new MyUserResource($request->user())]);
     }
 }
