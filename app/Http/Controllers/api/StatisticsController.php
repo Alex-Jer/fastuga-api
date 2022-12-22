@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 
@@ -94,13 +95,13 @@ class StatisticsController extends Controller
         $bestDays = Order::groupBy('date')->select('date', DB::raw('count(*) as quantity'))->orderBy('quantity', 'desc')->limit(10)->get();
 
         //Meses com mais orders
-        $monthsByQuantity = Order::select(DB::raw('YEAR(DATE) as year'), DB::raw('MONTH(DATE) as month'), DB::raw('count(*) as quantity'))->groupBy(DB::raw('1, 2'))->orderBy('year', 'asc')->orderBy('month', 'asc')->get();
+        $monthsByQuantity = Order::select(DB::raw('YEAR(DATE) as year'), DB::raw('MONTH(DATE) as month'), DB::raw('count(*) as quantity'))->groupBy(DB::raw('1, 2'))->orderBy('year', 'desc')->orderBy('month', 'desc')->limit(12)->get();
 
         //Top 10 dias mais profitable
         $bestProfitDays = Order::groupBy('date')->select('date', DB::raw('SUM(total_paid) as money_made'))->orderBy('money_made', 'desc')->limit(10)->get();
 
         //Meses mais profitable
-        $monthsByProfit = Order::select(DB::raw('YEAR(DATE) as year'), DB::raw('MONTH(DATE) as month'), DB::raw('SUM(total_paid) as money_made'))->groupBy(DB::raw('1, 2'))->orderBy('year', 'asc')->orderBy('month', 'asc')->get();
+        $monthsByProfit = Order::select(DB::raw('YEAR(DATE) as year'), DB::raw('MONTH(DATE) as month'), DB::raw('SUM(total_paid) as money_made'))->groupBy(DB::raw('1, 2'))->orderBy('year', 'desc')->orderBy('month', 'desc')->limit(12)->get();
 
         $totalProfit = doubleval(Order::select(DB::raw('SUM(total_paid) as totalProfit'))->get()[0]->totalProfit);
 
