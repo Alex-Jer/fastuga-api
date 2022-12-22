@@ -68,17 +68,21 @@ class StatisticsController extends Controller
             $prod = $orderItem->product;
             if ($prod == null)
                 $prod = Product::withTrashed()->find($orderItem->product_id);
-            return ['product' => ['id' => $prod->id, 'name' => $prod->name, 'photo_url' => $prod->photo_url, 'type' => $prod->type], 'deleted' => ($orderItem->product ? false : true), 'quantity' => $orderItem->quantity];
+            return ['product' => [/*'id' => $prod->id, */'name' => $prod->name, 'photo_url' => $prod->photo_url, 'type' => $prod->type], 'deleted' => ($orderItem->product ? false : true), 'quantity' => $orderItem->quantity];
         });
 
-        //Top 10 dias com mais orders
-        $bestDays = Order::groupBy('date')->select('date', DB::raw('count(*) as quantity'))->orderBy('quantity', 'desc')->limit(10)->get();
+        /*$worstDishes = OrderItem::withOrder()->where('orders.status', '!=', 'C')->groupBy('order_items.product_id')->select('order_items.product_id', DB::raw('count(*) as quantity'))->orderBy('quantity', 'asc')->limit(10)->get()->map(function ($orderItem) {
+            $prod = $orderItem->product;
+            if ($prod == null)
+                $prod = Product::withTrashed()->find($orderItem->product_id);
+            return ['product' => ['id' => $prod->id, 'name' => $prod->name, 'photo_url' => $prod->photo_url, 'type' => $prod->type], 'deleted' => ($orderItem->product ? false : true), 'quantity' => $orderItem->quantity];
+        });*/
 
         //Top 10 best customers
         $bestCustomers =  Order::where('customer_id', "!=", 'null')->join('customers', 'customers.id', 'orders.customer_id')->join('users', 'users.id', 'customers.user_id')->groupBy('orders.customer_id')->select('orders.customer_id', 'users.name', 'users.photo_url', 'users.deleted_at', 'customers.user_id', DB::raw('count(*) as quantity'))->orderBy('quantity', 'desc')->limit(10)->get()->map(function ($order) {
             return [
                 'user' => [
-                    'id' => $order->user_id,
+                    /*'id' => $order->user_id,*/
                     'name' => $order->name,
                     'photo_url' => $order->photo_url
                 ], 'deleted' => ($order->deleted_at ? false : true),
@@ -86,9 +90,18 @@ class StatisticsController extends Controller
             ];
         });
 
+        //Top 10 dias com mais orders
+        $bestDays = Order::groupBy('date')->select('date', DB::raw('count(*) as quantity'))->orderBy('quantity', 'desc')->limit(10)->get();
+
+        //Meses com mais orders
+        $monthsByQuantity = Order::select(DB::raw('YEAR(DATE) as year'), DB::raw('MONTH(DATE) as month'), DB::raw('count(*) as quantity'))->groupBy(DB::raw('1, 2'))->orderBy('year', 'asc')->orderBy('month', 'asc')->get();
+
         //Top 10 dias mais profitable
         $bestProfitDays = Order::groupBy('date')->select('date', DB::raw('SUM(total_paid) as money_made'))->orderBy('money_made', 'desc')->limit(10)->get();
 
-        return response(['best_dishes' => $bestDishes, 'best_days' => $bestDays, 'best_customers' => $bestCustomers, 'best_profit_days' => $bestProfitDays]);
+        //Meses mais profitable
+        $monthsByProfit = Order::select(DB::raw('YEAR(DATE) as year'), DB::raw('MONTH(DATE) as month'), DB::raw('SUM(total_paid) as money_made'))->groupBy(DB::raw('1, 2'))->orderBy('year', 'asc')->orderBy('month', 'asc')->get();
+
+        return response(['best_dishes' => $bestDishes, 'best_customers' => $bestCustomers, 'best_days' => ['num_orders' => $bestDays, 'profit' => $bestProfitDays], 'months_history' => ['num_orders' => $monthsByQuantity, 'profit' => $monthsByProfit]]);
     }
 }
