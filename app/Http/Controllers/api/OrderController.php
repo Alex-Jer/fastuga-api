@@ -104,6 +104,9 @@ class OrderController extends Controller
         if (count($cart) == 0)
             return response(["message" => "Cart is empty"], 422);
 
+        if ($usr)
+            $cstmr = $usr->customer;
+
         $pointsUsed = $newOrder["points_used"] ?? 0;
         if ($usr && $pointsUsed > 0) {
             if ($pointsUsed % 10 != 0)
@@ -113,8 +116,6 @@ class OrderController extends Controller
 
             if (($pointsUsed / 10) * $eur_per_10_pts > $totalPrice)
                 return response(["message" => "Points used exceed total price"], 422);
-
-            $cstmr = $usr->customer;
 
             if ($pointsUsed > 0) {
                 if ($cstmr->points < $pointsUsed) {
