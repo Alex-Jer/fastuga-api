@@ -105,7 +105,7 @@ class OrderController extends Controller
             return response(["message" => "Cart is empty"], 422);
 
         $pointsUsed = $newOrder["points_used"] ?? 0;
-        if ($usr && $pointsUsed > 0) {
+        if ($usr) {
             if ($pointsUsed % 10 != 0)
                 return response(["message" => "Points must be used in batches of 10"], 422);
 
@@ -147,8 +147,9 @@ class OrderController extends Controller
             return response(["message" => $payVal['message']], 402); //We are using 402 as a "payment failed" error code
         }
 
-        if ($usr && $pointsUsed > 0) {
+        if ($usr) {
             $cstmr->points -= $pointsUsed;
+            $cstmr->points += $newOrder['points_gained'];
             $cstmr->save();
         }
         $regOrder = Order::create($newOrder);
