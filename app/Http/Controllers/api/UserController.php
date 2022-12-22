@@ -68,6 +68,8 @@ class UserController extends Controller
     {
         if ($request->user()->id == $user->id)
             return response(['message' => 'You cannot delete your own account'], 422);
+        if ($user->type == 'C')
+            $user->customer->delete();
         $user->delete();
         return response(['message' => 'User deleted']);
     }
