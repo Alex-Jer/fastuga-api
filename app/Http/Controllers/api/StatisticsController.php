@@ -102,6 +102,12 @@ class StatisticsController extends Controller
         //Meses mais profitable
         $monthsByProfit = Order::select(DB::raw('YEAR(DATE) as year'), DB::raw('MONTH(DATE) as month'), DB::raw('SUM(total_paid) as money_made'))->groupBy(DB::raw('1, 2'))->orderBy('year', 'asc')->orderBy('month', 'asc')->get();
 
-        return response(['best_dishes' => $bestDishes, 'best_customers' => $bestCustomers, 'best_days' => ['num_orders' => $bestDays, 'profit' => $bestProfitDays], 'months_history' => ['num_orders' => $monthsByQuantity, 'profit' => $monthsByProfit]]);
+        $totalProfit = doubleval(Order::select(DB::raw('SUM(total_paid) as totalProfit'))->get()[0]->totalProfit);
+
+        $totalOrders = Order::count();
+
+        $totalCustomers = Customer::count();
+
+        return response(['best_dishes' => $bestDishes, 'best_customers' => $bestCustomers, 'best_days' => ['num_orders' => $bestDays, 'profit' => $bestProfitDays], 'months_history' => ['num_orders' => $monthsByQuantity, 'profit' => $monthsByProfit], 'total_profit' => $totalProfit, 'total_orders' => $totalOrders, 'total_customers' => $totalCustomers]);
     }
 }
