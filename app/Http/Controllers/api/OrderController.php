@@ -48,8 +48,8 @@ class OrderController extends Controller
     public function preparableDishes()
     {
         $query = OrderItem::where('status', 'W')->orWhere('status', 'P')->get();
-        if ($query->count() == 0)
-            return response(['message' => 'No orders to prepare'], 404);
+        /*if ($query->count() == 0)
+            return response(['message' => 'No orders to prepare'], 404);*/
         return $query->map(function ($orderItem) {
             return ['order_id' => $orderItem->order->id, 'ticket_number' => $orderItem->order->ticket_number, 'item' => new OrderItemResource($orderItem)];
         });;
