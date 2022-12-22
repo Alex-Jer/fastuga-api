@@ -47,7 +47,7 @@ class OrderController extends Controller
 
     public function preparableDishes()
     {
-        $query = OrderItem::where('status', 'W')->orWhere('status', 'P')->get();
+        $query = OrderItem::where('order_items.status', 'W')->where('orders.status', 'P')->orWhere('order_items.status', 'P')->join('orders', 'orders.id', 'order_items.order_id')->where('orders.status', 'P')->get();
         /*if ($query->count() == 0)
             return response(['message' => 'No orders to prepare'], 404);*/
         return $query->map(function ($orderItem) {
