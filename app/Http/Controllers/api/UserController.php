@@ -54,6 +54,8 @@ class UserController extends Controller
     {
         if ($request->user()->type == 'C')
             return response(['message' => 'To update your account as a customer please use the ' . route('update-customer-profile') . ' route'], 403);
+        if ($request->user()->type != 'EM' && $request->user()->type != $request->type)
+            return response(['message' => 'You cannot change your account type'], 403);
         return $this->update($request, $request->user());
     }
 
