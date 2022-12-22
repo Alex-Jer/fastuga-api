@@ -62,9 +62,8 @@ class Order extends Model
     public function cancelReason()
     {
         if (isset($this->custom)) {
-            $custom = json_decode($this->custom);
-            if (array_key_exists('cancel_reason', $custom))
-                return $custom['cancel_reason'];
+            if (array_key_exists('cancel_reason', $this->custom))
+                return $this->custom['cancel_reason'];
         }
         return null;
     }
