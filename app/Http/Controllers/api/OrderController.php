@@ -147,7 +147,7 @@ class OrderController extends Controller
             return response(["message" => $payVal['message']], 402); //We are using 402 as a "payment failed" error code
         }
 
-        if ($usr) {
+        if ($usr && $pointsUsed > 0) {
             $cstmr->points -= $pointsUsed;
             $cstmr->save();
         }
